@@ -1,0 +1,37 @@
+[gd_scene load_steps=3 format=3 uid="uid://cb7hyhndmygjl"]
+
+[ext_resource type="Script" path="res://scripts/Point.cs" id="1_leqw0"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yb2hk"]
+
+[node name="Point" type="Area2D"]
+script = ExtResource("1_leqw0")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_yb2hk")
