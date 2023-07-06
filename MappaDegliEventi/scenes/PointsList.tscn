@@ -1,0 +1,30 @@
+[gd_scene load_steps=2 format=3 uid="uid://26brukp2jnbv"]
+
+[ext_resource type="Script" path="res://scripts/PointsList.cs" id="1_crqud"]
+
+[node name="PointList" type="Button"]
+offset_right = 118.0
+offset_bottom = 31.0
+toggle_mode = true
+text = "Lista dei punti"
+script = ExtResource("1_crqud")
+
+[node name="ListScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = 103.0
+grow_horizontal = 2
+grow_vertical = 0
+horizontal_scroll_mode = 0
+
+[node name="ListContainer" type="VBoxContainer" parent="ListScrollContainer"]
+unique_name_in_owner = true
+visible = false
+layout_direction = 1
+layout_mode = 2
+size_flags_horizontal = 3
+
+[connection signal="toggled" from="." to="." method="_on_toggled"]

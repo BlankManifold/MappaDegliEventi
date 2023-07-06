@@ -1,0 +1,34 @@
+[gd_scene load_steps=2 format=3 uid="uid://bu5txu8fkd0as"]
+
+[ext_resource type="Script" path="res://scripts/MappaPlot.cs" id="1_gqpnv"]
+
+[node name="MappaPlot" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_gqpnv")
+_max_value = 3
+
+[node name="XLines" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="YLines" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="XTicks" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="YTicks" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="Points" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="GhostPoints" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[connection signal="resized" from="." to="." method="_on_resized"]

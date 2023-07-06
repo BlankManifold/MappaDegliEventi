@@ -1,0 +1,146 @@
+[gd_scene load_steps=2 format=3 uid="uid://bmhfheudgc3mt"]
+
+[ext_resource type="Script" path="res://scripts/InformationBox.cs" id="1_fshk0"]
+
+[node name="InformationBox" type="Button"]
+offset_right = 414.0
+offset_bottom = 31.0
+size_flags_horizontal = 3
+toggle_mode = true
+text = "Informazioni punto"
+script = ExtResource("1_fshk0")
+
+[node name="InformationContainer" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 32.0
+offset_bottom = 272.0
+grow_horizontal = 2
+
+[node name="IdBox" type="HBoxContainer" parent="InformationContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="InformationContainer/IdBox"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Id"
+
+[node name="IdLabel" type="Label" parent="InformationContainer/IdBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "-
+"
+
+[node name="NameBox" type="HBoxContainer" parent="InformationContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="InformationContainer/NameBox"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Nome"
+
+[node name="NameLabel" type="LineEdit" parent="InformationContainer/NameBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="InformationContainer"]
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="ImpactBox" type="HBoxContainer" parent="InformationContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Label" type="Label" parent="InformationContainer/HBoxContainer/ImpactBox"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Impatto"
+
+[node name="ImpactSpinBox" type="SpinBox" parent="InformationContainer/HBoxContainer/ImpactBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+min_value = -10.0
+max_value = 10.0
+rounded = true
+update_on_text_changed = true
+
+[node name="IntensityBox" type="HBoxContainer" parent="InformationContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Label" type="Label" parent="InformationContainer/HBoxContainer/IntensityBox"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Intensità"
+
+[node name="IntensitySpinBox" type="SpinBox" parent="InformationContainer/HBoxContainer/IntensityBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+min_value = -10.0
+max_value = 10.0
+rounded = true
+
+[node name="DateBox" type="HBoxContainer" parent="InformationContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="InformationContainer/DateBox"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Data evento"
+
+[node name="DateLabel" type="LineEdit" parent="InformationContainer/DateBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "
+"
+
+[node name="DescriptionBox" type="HBoxContainer" parent="InformationContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="InformationContainer/DescriptionBox"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+text = "Descrizione"
+
+[node name="DescriptionLabel" type="TextEdit" parent="InformationContainer/DescriptionBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ButtonsBox" type="HBoxContainer" parent="InformationContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="AddPoint" type="Button" parent="InformationContainer/ButtonsBox"]
+unique_name_in_owner = true
+layout_mode = 2
+disabled = true
+text = "Aggiungi"
+
+[node name="ModifyPoint" type="Button" parent="InformationContainer/ButtonsBox"]
+unique_name_in_owner = true
+layout_mode = 2
+disabled = true
+text = "Modifica"
+
+[node name="RemovePoint" type="Button" parent="InformationContainer/ButtonsBox"]
+unique_name_in_owner = true
+layout_mode = 2
+disabled = true
+text = "Rimuovi"
+
+[connection signal="toggled" from="." to="." method="_on_toggled"]
+[connection signal="button_down" from="InformationContainer/ButtonsBox/AddPoint" to="." method="_on_add_point_button_down"]
+[connection signal="button_down" from="InformationContainer/ButtonsBox/ModifyPoint" to="." method="_on_modify_point_button_down"]
+[connection signal="button_down" from="InformationContainer/ButtonsBox/RemovePoint" to="." method="_on_remove_point_button_down"]

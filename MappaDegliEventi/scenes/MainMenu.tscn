@@ -1,0 +1,71 @@
+[gd_scene load_steps=2 format=3 uid="uid://bs16nv871te3y"]
+
+[ext_resource type="Script" path="res://scripts/MainMenu.cs" id="1_j25cm"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_j25cm")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="TitleRect" type="TextureRect" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/TitleRect"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 50
+text = "Mappa degli eventi"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MainButtonsContainer" type="VBoxContainer" parent="MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 20
+
+[node name="NewMapPlotButton" type="Button" parent="MarginContainer/MainButtonsContainer" groups=["MainButton"]]
+custom_minimum_size = Vector2(400, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "CREA UNA MAPPA"
+
+[node name="MapGalleryButton" type="Button" parent="MarginContainer/MainButtonsContainer" groups=["MainButton"]]
+custom_minimum_size = Vector2(400, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "GALLERIA DELLE MAPPE
+"
+
+[node name="InformationsButton" type="Button" parent="MarginContainer/MainButtonsContainer" groups=["MainButton"]]
+custom_minimum_size = Vector2(400, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "INFORMAZIONI
+"
+
+[node name="SettingsButton" type="Button" parent="MarginContainer/MainButtonsContainer" groups=["MainButton"]]
+custom_minimum_size = Vector2(400, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "IMPOSTAZIONI"
