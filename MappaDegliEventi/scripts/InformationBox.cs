@@ -16,7 +16,7 @@ public partial class InformationBox : Button
 	private Button _modifyButton;
 	
 	private Point _selectedPoint;
-	private Globals.PointInfo _info;
+	private PointInfo _info;
 
 	private ButtonsState _state = ButtonsState.None;
 	public ButtonsState State 
@@ -47,9 +47,9 @@ public partial class InformationBox : Button
 
 
 	[Signal]
-	public delegate void AddedPointEventHandler(Globals.PointInfo info);
+	public delegate void AddedPointEventHandler(PointInfo info);
 	[Signal]
-	public delegate void ModifiedPointEventHandler(Point point, Globals.PointInfo info);
+	public delegate void ModifiedPointEventHandler(Point point, PointInfo info);
 	[Signal]
 	public delegate void RemovedPointEventHandler(Point point);
 
@@ -66,13 +66,13 @@ public partial class InformationBox : Button
         _modifyButton = GetNode<Button>("%ModifyPoint");
         _removeButton = GetNode<Button>("%RemovePoint");
 
-		_info = new Globals.PointInfo(0,"",0,0,""); 
+		_info = new PointInfo(0,"",0,0,""); 
 		_informationContainer.Visible = false;
     }
 
-	public void Update(Globals.PointInfo info)
+	public void Update(PointInfo info)
 	{
-		_info = new Globals.PointInfo(info);
+		_info = new PointInfo(info);
 		_idLabel.Text = _info.id.ToString(); 
 		_nameLabel.Text = _info.name; 
 		_intensitySpinBox.Value = _info.X; 
@@ -125,7 +125,7 @@ public partial class InformationBox : Button
 		_info.Y = (int)_impactSpinBox.Value; 
 		_info.description = _descriptionLabel.Text; 
 
-		EmitSignal(SignalName.AddedPoint,  new Globals.PointInfo(_info));
+		EmitSignal(SignalName.AddedPoint,  new PointInfo(_info));
 		this.State = ButtonsState.None;
 	}
 	public void _on_modify_point_button_down()
@@ -136,7 +136,7 @@ public partial class InformationBox : Button
 		_info.Y = (int)_impactSpinBox.Value; 
 		_info.description = _descriptionLabel.Text; 
 
-		EmitSignal(SignalName.ModifiedPoint, _selectedPoint, new Globals.PointInfo(_info));
+		EmitSignal(SignalName.ModifiedPoint, _selectedPoint, new PointInfo(_info));
 		this.State = ButtonsState.None;
 	}
 	public void _on_remove_point_button_down()

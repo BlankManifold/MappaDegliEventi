@@ -1,6 +1,5 @@
 using Godot;
-using System;
-
+using System.Collections.Generic;
 public partial class MappaPlot : Control
 {
 	[Export]
@@ -14,6 +13,7 @@ public partial class MappaPlot : Control
 	private Node2D _YTicks; 
 	private Node2D _Points; 
 	private Node2D _GhostPoints; 
+	private  Dictionary<Vector2I,GhostPoint> _GhostPointsDict = new Dictionary<Vector2I, GhostPoint> {}; 
 	private Vector2I _x_ticks_padding = new Vector2I(5,1);
 	private Vector2I _y_ticks_padding = new Vector2I(5,0);
 	private Vector2 _origin;
@@ -78,6 +78,7 @@ public partial class MappaPlot : Control
 				ghost_point.Init(ghost_pos, ghost_coords, ghost_size);
 				_GhostPoints.AddChild(ghost_point);
 				ghost_point.GhostPointButtonDown += OnGhostPointButtonDown;
+				_GhostPointsDict.Add(ghost_coords, ghost_point);
 			}
 		}
 	}
@@ -96,7 +97,6 @@ public partial class MappaPlot : Control
 
 		return tick;
 	}
-
 	private Line2D _CreateLine(int i, Vector2 A, Vector2 B)
 	{
 		Line2D line = new Line2D();
@@ -116,13 +116,36 @@ public partial class MappaPlot : Control
 
 		return line;
 	}
-
 	private Vector2 _CoordsToPos(int x, int y)
 	{
 		Vector2 pos = new Vector2I(x,-y)*_lines_spacing + _origin;
 		return pos;
 	}
 
+	public Godot.Collections.Array<Node> GetPoints()
+	{
+		return _Points.GetChildren();
+	}
+	public void AddAPoint(PointInfo info)
+	{
+		PackedScene point_scene = Globals.PackedScenes.Point;
+		Point point = point_scene.Instantiate<Point>();
+
+		point.Position = _CoordsToPos(info.X,info.Y) - point.Size/2;
+		point.Init(info);
+
+		_Points.AddChild(point);
+		EmitSignal(SignalName.AddedPoint, point);
+	}
+	public void RemoveGhost(PointInfo info)
+	{
+		Vector2I coords = new  Vector2I(info.X,info.Y);
+		GhostPoint ghost = _GhostPointsDict[coords];
+		_GhostPointsDict.Remove(coords);
+		ghost.QueueFree();
+	
+		_selected_ghost_point = null;
+	}
 	public void OnGhostPointButtonDown(GhostPoint ghost)
 	{
 		if (_selected_ghost_point != null)
@@ -165,25 +188,11 @@ public partial class MappaPlot : Control
 		foreach (GhostPoint ghost_point in _GhostPoints.GetChildren())
 			ghost_point.Position = affine_factor*(ghost_point.Position+ghost_point.Size/2)-ghost_point.Size/2;
 	}
-	public void _on_information_box_added_point(Globals.PointInfo info)
+	public void _on_information_box_added_point(PointInfo info)
 	{
-		if (_selected_ghost_point != null)
-		{
-			_selected_ghost_point.Deselect();
-			_selected_ghost_point.QueueFree();
-			_selected_ghost_point = null;
-		}
-
-		PackedScene point_scene = Globals.PackedScenes.Point;
-		Point point = point_scene.Instantiate<Point>();
-
-		point.Position = _CoordsToPos(info.X,info.Y) - point.Size/2;
-		point.Init(info);
-
-		_Points.AddChild(point);
-		EmitSignal(SignalName.AddedPoint, point);
+		RemoveGhost(info);
+		AddAPoint(info);
 	}
-	
 	public void _on_information_box_removed_point(Point point)
 	{
 		int id = (int)point.Info.id;
@@ -196,8 +205,7 @@ public partial class MappaPlot : Control
 			p.Init(p.Info);
 		}
 	}
-	
-	public void _on_information_box_modified_point(Point point, Globals.PointInfo info)
+	public void _on_information_box_modified_point(Point point, PointInfo info)
 	{
 		point.Init(info); 
 	}

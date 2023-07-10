@@ -1,27 +1,15 @@
 using Godot;
-using System;
-
+using System.IO;
 public partial class MainMenu : Control
 {
+    [Signal]
+    public delegate void ButtonDownEventHandler(string name);
+
 	public override void _Ready()
 	{
         foreach (Button button in GetTree().GetNodesInGroup("MainButton"))
         {
-            button.ButtonDown += () => OnMainButtonDown(button.Name);
+            button.ButtonDown += () => EmitSignal(SignalName.ButtonDown, new Variant[] {button.Name});
         }
 	}
-
-	public void OnMainButtonDown(string name)
-    {
-        switch (name)
-        {
-            case "NewMapPlotButton":
-                GetTree().ChangeSceneToPacked(Globals.PackedScenes.MappaUI);
-                break;
-            default:
-                break;
-        }
-    }
-
-
 }

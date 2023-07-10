@@ -8,21 +8,45 @@ public partial class PointsList : Button
     {
 		_listContainer = GetNode<VBoxContainer>("%ListContainer");
     }
+
+	public void AddAPoint(PointInfo info)
+	{
+		int id = _listContainer.GetChildCount()+1;
+		PackedScene pointListButtonSene = Globals.PackedScenes.PointListButton;
+		PointListButton pointButton = pointListButtonSene.Instantiate<PointListButton>();
+		
+		pointButton.PointId = id;
+		pointButton.PointName = info.name;
+
+		_listContainer.AddChild(pointButton);
+	}
     
 	public void _on_toggled(bool pressed)
 	{
 		_listContainer.Visible = pressed;
 	}
 
-	public void _on_information_box_added_point(Globals.PointInfo info)
+	public void _on_information_box_added_point(PointInfo info)
 	{
-		int id = _listContainer.GetChildCount()+1;
-		Button button = new Button();
-		button.Text = $"{id.ToString()}. {info.name}";
-		button.TextOverrunBehavior = TextServer.OverrunBehavior.TrimEllipsis;
-		button.Alignment = HorizontalAlignment.Left;
+		AddAPoint(info);
+	}
+	public void _on_information_box_modified_point(Point point, PointInfo info)
+	{
+		int id = (int)info.id-1;
+		_listContainer.GetChild<PointListButton>(id).PointName = info.name;
+	}
+	public void _on_information_box_removed_point(Point point)
+	{
+		int id = (int)point.Info.id-1;
+		PointListButton childToBeRemoved = _listContainer.GetChild<PointListButton>(id);
+		_listContainer.RemoveChild(childToBeRemoved);
+		childToBeRemoved.QueueFree();
 
-		_listContainer.AddChild(button);
+		for (int i = id; i < _listContainer.GetChildCount(); i++)
+		{
+			PointListButton pointButton = _listContainer.GetChild<PointListButton>(i);
+			pointButton.PointId -= 1;
+		}
 	}
 
 

@@ -2,8 +2,8 @@ using Godot;
 
 public partial class Point : Button
 {
-	private Globals.PointInfo _info;
-	public Globals.PointInfo Info
+	private PointInfo _info;
+	public PointInfo Info
 	{
 		get {return _info;}
 	}
@@ -14,7 +14,7 @@ public partial class Point : Button
 	[Signal]
 	public delegate void SelectedEventHandler(Point point, bool pressed);
 
-	public void Init(Globals.PointInfo info)
+	public void Init(PointInfo info)
 	{
 		_info = info;
 		GetNode<Label>("%Name").Text = info.name;
@@ -23,7 +23,7 @@ public partial class Point : Button
 	public override void _Ready()
 	{
 		if (_info==null)
-			_info = new Globals.PointInfo(0,"",0,0,"");
+			_info = new PointInfo(0,"",0,0,"");
 		_popupInfo = GetNode<VBoxContainer>("%PopUpInfo");
 		_popupInfo.Visible = false;
 		AddToGroup("points");

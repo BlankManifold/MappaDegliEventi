@@ -11,22 +11,15 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_j25cm")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="TitleRect" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
 
-[node name="TitleRect" type="TextureRect" parent="MarginContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="MarginContainer/TitleRect"]
+[node name="Label" type="Label" parent="TitleRect"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -37,34 +30,45 @@ text = "Mappa degli eventi"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MainButtonsContainer" type="VBoxContainer" parent="MarginContainer"]
+[node name="MainButtonsContainer" type="VBoxContainer" parent="."]
 unique_name_in_owner = true
-layout_mode = 2
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -130.0
+offset_right = 200.0
+offset_bottom = 130.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_constants/separation = 20
 
-[node name="NewMapPlotButton" type="Button" parent="MarginContainer/MainButtonsContainer" groups=["MainButton"]]
+[node name="NewMapPlotButton" type="Button" parent="MainButtonsContainer" groups=["MainButton"]]
 custom_minimum_size = Vector2(400, 50)
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "CREA UNA MAPPA"
 
-[node name="MapGalleryButton" type="Button" parent="MarginContainer/MainButtonsContainer" groups=["MainButton"]]
+[node name="MapGalleryButton" type="Button" parent="MainButtonsContainer" groups=["MainButton"]]
 custom_minimum_size = Vector2(400, 50)
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "GALLERIA DELLE MAPPE
 "
 
-[node name="InformationsButton" type="Button" parent="MarginContainer/MainButtonsContainer" groups=["MainButton"]]
+[node name="InformationsButton" type="Button" parent="MainButtonsContainer" groups=["MainButton"]]
 custom_minimum_size = Vector2(400, 50)
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "INFORMAZIONI
 "
 
-[node name="SettingsButton" type="Button" parent="MarginContainer/MainButtonsContainer" groups=["MainButton"]]
+[node name="SettingsButton" type="Button" parent="MainButtonsContainer" groups=["MainButton"]]
 custom_minimum_size = Vector2(400, 50)
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
