@@ -41,6 +41,10 @@ layout_mode = 2
 text = "Salva
 "
 
+[node name="ClearPlotButton" type="Button" parent="MainVerticalBox/HBoxContainer"]
+layout_mode = 2
+text = "Reset"
+
 [node name="GoBackButton" type="Button" parent="MainVerticalBox/HBoxContainer"]
 layout_mode = 2
 text = "Esci"
@@ -112,9 +116,11 @@ layout_mode = 2
 size_flags_vertical = 0
 
 [connection signal="button_down" from="MainVerticalBox/HBoxContainer/SaveButton" to="." method="_on_save_button_button_down"]
+[connection signal="button_down" from="MainVerticalBox/HBoxContainer/ClearPlotButton" to="." method="_on_clear_plot_button_button_down"]
 [connection signal="button_down" from="MainVerticalBox/HBoxContainer/GoBackButton" to="." method="_on_go_back_button_button_down"]
-[connection signal="AddedPoint" from="MainVerticalBox/MappaPlot" to="." method="_on_mappa_plot_added_point"]
+[connection signal="CreatedAPoint" from="MainVerticalBox/MappaPlot" to="." method="_on_mappa_plot_created_a_point"]
 [connection signal="GhostPointButtonDown" from="MainVerticalBox/MappaPlot" to="MainVerticalBox/PointInfoBox/InformationBox" method="_on_mappa_plot_ghost_point_button_down"]
+[connection signal="PointListButtonSelected" from="MainVerticalBox/PointInfoBox/PointList" to="MainVerticalBox/MappaPlot" method="_on_point_list_point_list_button_selected"]
 [connection signal="AddedPoint" from="MainVerticalBox/PointInfoBox/InformationBox" to="MainVerticalBox/MappaPlot" method="_on_information_box_added_point"]
 [connection signal="AddedPoint" from="MainVerticalBox/PointInfoBox/InformationBox" to="MainVerticalBox/PointInfoBox/PointList" method="_on_information_box_added_point"]
 [connection signal="ModifiedPoint" from="MainVerticalBox/PointInfoBox/InformationBox" to="MainVerticalBox/MappaPlot" method="_on_information_box_modified_point"]

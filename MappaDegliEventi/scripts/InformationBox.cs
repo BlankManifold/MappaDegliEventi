@@ -15,10 +15,11 @@ public partial class InformationBox : Button
 	private Button _removeButton;
 	private Button _modifyButton;
 	
-	private Point _selectedPoint;
+	private Point _selectedPoint = null;
 	private PointInfo _info;
+	private bool _stopHovering = false;
 
-	private ButtonsState _state = ButtonsState.None;
+	private ButtonsState _state = ButtonsState.Add;
 	public ButtonsState State 
 	{
 		get {return _state;}
@@ -47,7 +48,7 @@ public partial class InformationBox : Button
 
 
 	[Signal]
-	public delegate void AddedPointEventHandler(PointInfo info);
+	public delegate void AddedPointEventHandler(Point point);
 	[Signal]
 	public delegate void ModifiedPointEventHandler(Point point, PointInfo info);
 	[Signal]
@@ -75,9 +76,32 @@ public partial class InformationBox : Button
 		_info = new PointInfo(info);
 		_idLabel.Text = _info.id.ToString(); 
 		_nameLabel.Text = _info.name; 
-		_intensitySpinBox.Value = _info.X; 
-		_impactSpinBox.Value = _info.Y; 
+		_impactSpinBox.Value = _info.X; 
+		_intensitySpinBox.Value = _info.Y; 
 		_descriptionLabel.Text = _info.description; 
+	}
+	public void Update(Vector2I coords, uint id)
+	{
+		_info.id = id;
+		_info.X = coords.X;
+		_info.Y = coords.Y;
+
+		_idLabel.Text = _info.id.ToString(); 
+		_nameLabel.Text = ""; 
+		_impactSpinBox.Value = _info.X; 
+		_intensitySpinBox.Value = _info.Y; 
+		_descriptionLabel.Text = ""; 
+	}
+	public void UpdateSelection(Point point)
+	{
+		if (_selectedPoint != point && _selectedPoint != null)
+		{
+			_selectedPoint.UpdateSelection(false);
+		}
+
+		point.UpdateSelection(true);		
+		_selectedPoint = point;
+		_stopHovering = true;
 	}
 	public void Clear()
 	{
@@ -86,12 +110,24 @@ public partial class InformationBox : Button
 		_nameLabel.Text = ""; 
 		_intensitySpinBox.Value = 0; 
 		_impactSpinBox.Value = 0; 
-		_descriptionLabel.Text = ""; 
+		_descriptionLabel.Text = "";
+		this.State = ButtonsState.Add; 
+		
+		if (_selectedPoint != null)
+		{
+			_selectedPoint.UpdateSelection(false);
+			_selectedPoint = null;
+			_stopHovering = false;
+		}
 	}
 
+	private void FocusNameLineEdit()
+	{
+		_nameLabel.GrabFocus();
+	}
 	public void OnPointHovering(Point point, bool on)
 	{
-		if (_selectedPoint != null)
+		if (_stopHovering)
 			return;
 
 		if (!on)
@@ -105,15 +141,14 @@ public partial class InformationBox : Button
 	public void OnPointSelected(Point point, bool pressed)
 	{
 		if (pressed)
-		{
-			_selectedPoint = point;
-			Update(point.Info);
-			this.State = ButtonsState.Modify;
+		{	
 			EmitSignal(SignalName.Toggled, pressed);
+			this.State = ButtonsState.Modify;
+
+			UpdateSelection(point);
+			Update(point.Info);
 			return;
 		}
-		_selectedPoint = null;
-		this.State = ButtonsState.None;
 		Clear();
 	}
 
@@ -121,51 +156,48 @@ public partial class InformationBox : Button
 	{
 		_info.id = (uint)_idLabel.Text.ToInt(); 
 		_info.name = _nameLabel.Text; 
-		_info.X = (int)_intensitySpinBox.Value; 
-		_info.Y = (int)_impactSpinBox.Value; 
+		_info.X = (int)_impactSpinBox.Value; 
+		_info.Y= (int)_intensitySpinBox.Value; 
 		_info.description = _descriptionLabel.Text; 
 
-		EmitSignal(SignalName.AddedPoint,  new PointInfo(_info));
-		this.State = ButtonsState.None;
+		this.State = ButtonsState.Modify;
+		CallDeferred(MethodName.FocusNameLineEdit);
+		EmitSignal(SignalName.AddedPoint, new PointInfo(_info));
 	}
 	public void _on_modify_point_button_down()
 	{
 		_info.id = (uint)_idLabel.Text.ToInt(); 
 		_info.name = _nameLabel.Text; 
-		_info.X = (int)_intensitySpinBox.Value; 
-		_info.Y = (int)_impactSpinBox.Value; 
+		_info.X = (int)_impactSpinBox.Value; 
+		_info.Y = (int)_intensitySpinBox.Value; 
 		_info.description = _descriptionLabel.Text; 
 
 		EmitSignal(SignalName.ModifiedPoint, _selectedPoint, new PointInfo(_info));
-		this.State = ButtonsState.None;
+		this.State = ButtonsState.Modify;
 	}
 	public void _on_remove_point_button_down()
 	{
 		EmitSignal(SignalName.RemovedPoint, _selectedPoint);
-		_selectedPoint = null;
 		Clear();
-		this.State = ButtonsState.None;
 	}
-
 	public void _on_toggled(bool pressed)
 	{
 		_informationContainer.Visible = pressed;
+		CallDeferred(MethodName.FocusNameLineEdit);
 	}
-
 	public void _on_mappa_plot_ghost_point_button_down(Vector2I coords, uint id)
 	{
-		_info.id = id;
-		_info.X = coords.X;
-		_info.Y = coords.Y;
-
-		_idLabel.Text = _info.id.ToString(); 
-		_nameLabel.Text = ""; 
-		_intensitySpinBox.Value = _info.X; 
-		_impactSpinBox.Value = _info.Y; 
-		_descriptionLabel.Text = ""; 
-
+		_stopHovering = true;
 		EmitSignal(SignalName.Toggled, true);
 		this.State = ButtonsState.Add;
+
+		if (_selectedPoint != null)
+		{
+			_selectedPoint.UpdateSelection(false);
+			_selectedPoint = null;
+		}
+
+		Update(coords, id);
 	}
 
 }

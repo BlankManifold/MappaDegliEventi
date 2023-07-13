@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 namespace Handlers
 {
@@ -13,7 +14,10 @@ namespace Handlers
 
 			if (mapPlotRes.Identifier == null)
 			{
-				mapPlotRes.Identifier = $"{Convert.ToString(0,16)}";
+				Globals.MapGalleryData.CurrentIdenfier += 1;
+				_UpdateLastIdenfierMainConfig();
+
+				mapPlotRes.Identifier = $"{Convert.ToString(Globals.MapGalleryData.CurrentIdenfier,16)}";
 			}
 			
 			foreach (Point point in points)
@@ -26,7 +30,6 @@ namespace Handlers
 
 			Globals.MapGalleryData.Add(mapPlotRes);
         }
-
         static public MapPlotRes LoadMapPlot(string identifier)
         {
 			string file_path = System.IO.Path.Combine(Globals.Paths.SaveMappaPlot,$"map_{identifier}.tres");
@@ -38,7 +41,61 @@ namespace Handlers
         	MapPlotRes mapPlotRes = (MapPlotRes)ResourceLoader.Load(file_path, cacheMode:ResourceLoader.CacheMode.Ignore);
 			return mapPlotRes;
 		}
+        static public void RemoveMapPlot(string identifier)
+        {
+			string fname = $"map_{identifier}.tres";
+			string file_path = System.IO.Path.Combine(Globals.Paths.SaveMappaPlot,fname);
+			if (ResourceLoader.Exists(file_path))
+			{
+				DirAccess.Open(Globals.Paths.SaveMappaPlot).Remove(fname);
+				return;
+			}
+		}
+        static public void LoadMainConfig()
+        {
+			string configFilePath = System.IO.Path.Combine(Globals.Paths.SaveConfigs, $"main_config.cfg");
+			ConfigFile config = new ConfigFile();
+			Error err = config.Load(configFilePath);
+			if (err != Error.Ok) { return; }
 
+			uint lastMapIdenfier = (uint)config.GetValue("maps", "last_identifier");
+			Globals.MapGalleryData.CurrentIdenfier = lastMapIdenfier+1;
+		}
+        static public void CreateMainConfig()
+        {
+			if (DirAccess.Open(Globals.Paths.SaveConfigs) != null)
+			{
+				return;
+			}
+			DirAccess dirAccess = DirAccess.Open("user://");
+			dirAccess.MakeDir("configs");
+
+			string configFilePath = System.IO.Path.Combine(Globals.Paths.SaveConfigs, $"main_config.cfg");
+			ConfigFile config = new ConfigFile();
+			
+			config.SetValue("maps", "last_identifier", 0);
+			config.Save(configFilePath);
+		}
+        static public void CreateSaveMapDir()
+        {
+			if (DirAccess.Open(Globals.Paths.SaveMappaPlot) != null)
+			{
+				return;
+			}
+			DirAccess dirAccess = DirAccess.Open("user://");
+			dirAccess.MakeDir("maps");
+		}
+        static private void _UpdateLastIdenfierMainConfig()
+        {
+			string configFilePath = System.IO.Path.Combine(Globals.Paths.SaveConfigs, $"main_config.cfg");
+			ConfigFile config = new ConfigFile();
+
+			Error err = config.Load(configFilePath);
+			if (err != Error.Ok) { return; }
+
+			config.SetValue("maps", "last_identifier", Globals.MapGalleryData.CurrentIdenfier);
+			config.Save(configFilePath);
+		}
 		static public void LoadMapGalleryData()
     	{
 			// foreach (string path in System.IO.Directory.GetFiles("/Users/lucastefanelli/Library/Application Support/Godot/app_userdata/MappaDegliEventi/maps"))

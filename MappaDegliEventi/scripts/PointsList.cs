@@ -4,23 +4,36 @@ public partial class PointsList : Button
 {
 	private VBoxContainer _listContainer;
 
-    public override void _Ready()
+	[Signal]
+    public delegate void PointListButtonSelectedEventHandler(int id);
+	
+	public override void _Ready()
     {
 		_listContainer = GetNode<VBoxContainer>("%ListContainer");
     }
-
+	
 	public void AddAPoint(PointInfo info)
 	{
 		int id = _listContainer.GetChildCount()+1;
 		PackedScene pointListButtonSene = Globals.PackedScenes.PointListButton;
 		PointListButton pointButton = pointListButtonSene.Instantiate<PointListButton>();
+		pointButton.ButtonDown += () => EmitSignal(SignalName.PointListButtonSelected, new Variant[] {id});
 		
 		pointButton.PointId = id;
 		pointButton.PointName = info.name;
 
 		_listContainer.AddChild(pointButton);
 	}
-    
+    public void Clear()
+	{
+		foreach (PointListButton pointButton in _listContainer.GetChildren())
+		{
+			_listContainer.RemoveChild(pointButton);
+			pointButton.QueueFree();
+		}
+		EmitSignal(SignalName.Toggled, false);
+	}
+
 	public void _on_toggled(bool pressed)
 	{
 		_listContainer.Visible = pressed;
@@ -47,6 +60,11 @@ public partial class PointsList : Button
 			PointListButton pointButton = _listContainer.GetChild<PointListButton>(i);
 			pointButton.PointId -= 1;
 		}
+	}
+
+	public void OnPointButtonDown(PointListButton button)
+	{
+
 	}
 
 

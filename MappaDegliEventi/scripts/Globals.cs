@@ -10,6 +10,7 @@ namespace Globals
     }
     public static class MapGalleryData
     {
+        public static uint CurrentIdenfier;
         public static Dictionary<string, Dictionary<string, string>> MapsDict = new Dictionary<string, Dictionary<string, string>> {};
         public static void Add(MapPlotRes mapPlotRes)
         {
@@ -18,6 +19,10 @@ namespace Globals
                 ["name"]= mapPlotRes.MapName,
                 ["album"]= "",
             };
+        }
+        public static void Remove(string identifier)
+        {
+            MapsDict.Remove(identifier);
         }
     }
     public static class PackedScenes
@@ -33,6 +38,7 @@ namespace Globals
     public struct Paths
     {
         public static string SaveMappaPlot = "user://maps";
+        public static string SaveConfigs = "user://configs";
         // public static string MappaPlotResScript = "res://scripts/MapPlotRes.cs";
     }
 }

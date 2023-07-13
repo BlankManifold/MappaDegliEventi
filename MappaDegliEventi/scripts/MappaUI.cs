@@ -35,18 +35,11 @@ public partial class MappaUI : Control
 		Godot.Collections.Array<PointInfo> pointInfoList = (Godot.Collections.Array<PointInfo>)mapPlotRes.PointInfoList;
 		foreach (PointInfo info in pointInfoList)
 		{
-			_mapPlot.AddAPoint(info);
+			_mapPlot.CreateAPoint(info, true);
 			_mapPlot.RemoveGhost(info);
 			_pointList.AddAPoint(info);
 		}; 
 	}
-
-	public void _on_mappa_plot_added_point(Point point)
-	{
-		point.Hovering += _informationBox.OnPointHovering;
-		point.Selected += _informationBox.OnPointSelected;
-	}
-
 	public void _on_save_button_button_down()
 	{
 		Handlers.SaveLoadHandler.SaveMapPlot(_mapPlot.GetPoints(), _mappaNameLineEdit.Text, _mapPlotIdentifier);
@@ -55,6 +48,19 @@ public partial class MappaUI : Control
 	{
 		EmitSignal(SignalName.GoBackButtonDown);
 	}
-	
+	public void _on_clear_plot_button_button_down()
+	{
+		_mapPlot.Clear();
+		_informationBox.Clear();
+		_pointList.Clear();
+	}
+	public void _on_mappa_plot_created_a_point(Point point, bool from_loading)
+	{
+		point.Selected += _informationBox.OnPointSelected; 
+		point.Hovering += _informationBox.OnPointHovering; 
+		
+		if (!from_loading)
+			_informationBox.UpdateSelection(point);
+	}
 	
 }
