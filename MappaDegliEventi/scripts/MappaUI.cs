@@ -8,6 +8,8 @@ public partial class MappaUI : Control
 	private MappaPlot _mapPlot;
 	private PointsList _pointList;
 
+	private Handlers.MapAndInformationsHandler _mapAndInformationsHandler;
+
 	[Signal]
 	public delegate void ReadyToLoadFromResourceEventHandler();
 	[Signal]
@@ -20,6 +22,8 @@ public partial class MappaUI : Control
 	}
     public override void _Ready()
     {
+		_mapAndInformationsHandler = GetNode<Handlers.MapAndInformationsHandler>("%MapAndInformationsHandler");
+
         _informationBox = GetNode<InformationBox>("%InformationBox");
         _mappaNameLineEdit = GetNode<LineEdit>("%MappaName");
         _mapPlot = GetNode<MappaPlot>("%MappaPlot");
@@ -35,14 +39,15 @@ public partial class MappaUI : Control
 		Godot.Collections.Array<PointInfo> pointInfoList = (Godot.Collections.Array<PointInfo>)mapPlotRes.PointInfoList;
 		foreach (PointInfo info in pointInfoList)
 		{
-			_mapPlot.CreateAPoint(info, true);
-			_mapPlot.RemoveGhost(info);
+			Point point = _mapPlot.AddedPoint(info);
+			point.Hovering += _mapAndInformationsHandler.UpdateHovering; 
+
 			_pointList.AddAPoint(info);
 		}; 
 	}
 	public void _on_save_button_button_down()
 	{
-		Handlers.SaveLoadHandler.SaveMapPlot(_mapPlot.GetPoints(), _mappaNameLineEdit.Text, _mapPlotIdentifier);
+		Handlers.SaveLoadHandler.SaveMapPlot(_mapPlot.Points(), _mappaNameLineEdit.Text, _mapPlotIdentifier);
 	}
 	public void _on_go_back_button_button_down()
 	{
@@ -53,14 +58,7 @@ public partial class MappaUI : Control
 		_mapPlot.Clear();
 		_informationBox.Clear();
 		_pointList.Clear();
-	}
-	public void _on_mappa_plot_created_a_point(Point point, bool from_loading)
-	{
-		point.Selected += _informationBox.OnPointSelected; 
-		point.Hovering += _informationBox.OnPointHovering; 
-		
-		if (!from_loading)
-			_informationBox.UpdateSelection(point);
+		_mapAndInformationsHandler.Clear();
 	}
 	
 }

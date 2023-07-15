@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://cu2vt3givdqdv"]
+[gd_scene load_steps=6 format=3 uid="uid://cu2vt3givdqdv"]
 
 [ext_resource type="Script" path="res://scripts/MappaUI.cs" id="1_q5rt5"]
 [ext_resource type="PackedScene" uid="uid://bu5txu8fkd0as" path="res://scenes/MappaPlot.tscn" id="1_uv07d"]
+[ext_resource type="Script" path="res://scripts/MapAndInformationsHandler.cs" id="2_gh3ak"]
 [ext_resource type="PackedScene" uid="uid://bmhfheudgc3mt" path="res://scenes/InformationBox.tscn" id="3_7l7k4"]
 [ext_resource type="PackedScene" uid="uid://26brukp2jnbv" path="res://scenes/PointsList.tscn" id="3_tbdh3"]
 
@@ -14,6 +15,10 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_q5rt5")
+
+[node name="MapAndInformationsHandler" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("2_gh3ak")
 
 [node name="MainVerticalBox" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -118,12 +123,4 @@ size_flags_vertical = 0
 [connection signal="button_down" from="MainVerticalBox/HBoxContainer/SaveButton" to="." method="_on_save_button_button_down"]
 [connection signal="button_down" from="MainVerticalBox/HBoxContainer/ClearPlotButton" to="." method="_on_clear_plot_button_button_down"]
 [connection signal="button_down" from="MainVerticalBox/HBoxContainer/GoBackButton" to="." method="_on_go_back_button_button_down"]
-[connection signal="CreatedAPoint" from="MainVerticalBox/MappaPlot" to="." method="_on_mappa_plot_created_a_point"]
-[connection signal="GhostPointButtonDown" from="MainVerticalBox/MappaPlot" to="MainVerticalBox/PointInfoBox/InformationBox" method="_on_mappa_plot_ghost_point_button_down"]
 [connection signal="PointListButtonSelected" from="MainVerticalBox/PointInfoBox/PointList" to="MainVerticalBox/MappaPlot" method="_on_point_list_point_list_button_selected"]
-[connection signal="AddedPoint" from="MainVerticalBox/PointInfoBox/InformationBox" to="MainVerticalBox/MappaPlot" method="_on_information_box_added_point"]
-[connection signal="AddedPoint" from="MainVerticalBox/PointInfoBox/InformationBox" to="MainVerticalBox/PointInfoBox/PointList" method="_on_information_box_added_point"]
-[connection signal="ModifiedPoint" from="MainVerticalBox/PointInfoBox/InformationBox" to="MainVerticalBox/MappaPlot" method="_on_information_box_modified_point"]
-[connection signal="ModifiedPoint" from="MainVerticalBox/PointInfoBox/InformationBox" to="MainVerticalBox/PointInfoBox/PointList" method="_on_information_box_modified_point"]
-[connection signal="RemovedPoint" from="MainVerticalBox/PointInfoBox/InformationBox" to="MainVerticalBox/MappaPlot" method="_on_information_box_removed_point"]
-[connection signal="RemovedPoint" from="MainVerticalBox/PointInfoBox/InformationBox" to="MainVerticalBox/PointInfoBox/PointList" method="_on_information_box_removed_point"]

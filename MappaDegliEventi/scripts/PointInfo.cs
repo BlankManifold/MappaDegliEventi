@@ -2,7 +2,7 @@ using Godot;
 
 public partial class PointInfo : Resource
 	{
-		[Export] public uint id;
+		[Export] public int id;
 		[Export] public string name;
 		[Export] public int X;
 		[Export] public int Y;
@@ -15,7 +15,7 @@ public partial class PointInfo : Resource
 			Y = 0;
 			description = "";
 		}
-		public PointInfo(uint id_, string name_, int X_, int Y_, string description_)
+		public PointInfo(int id_, string name_, int X_, int Y_, string description_)
 		{
 			id = id_; 
 			name = name_;

@@ -2,12 +2,12 @@
 
 [ext_resource type="Script" path="res://scripts/Point.cs" id="1_leqw0"]
 
-[node name="Point" type="Button"]
+[node name="Point" type="Control"]
 custom_minimum_size = Vector2(10, 10)
+layout_mode = 3
+anchors_preset = 0
 offset_right = 20.0
 offset_bottom = 20.0
-toggle_mode = true
-flat = true
 script = ExtResource("1_leqw0")
 
 [node name="ColorRect" type="ColorRect" parent="."]
@@ -58,4 +58,3 @@ vertical_alignment = 1
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
-[connection signal="toggled" from="." to="." method="_on_toggled"]

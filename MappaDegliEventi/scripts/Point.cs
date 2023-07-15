@@ -1,6 +1,6 @@
 using Godot;
 
-public partial class Point : Button
+public partial class Point : Control
 {
     private PointInfo _info;
     public PointInfo Info
@@ -24,6 +24,7 @@ public partial class Point : Button
     {
         Position = position;
         _info = info;
+        AddToGroup("points");
         GetNode<Label>("%Name").Text = info.name;
         GetNode<Label>("%IdLabel").Text = info.id.ToString();
     }
@@ -38,8 +39,6 @@ public partial class Point : Button
 
     public void UpdateSelection(bool select)
     {
-        SetPressedNoSignal(select);
-
         if (select)
         {
             GetNode<ColorRect>("ColorRect").Modulate = new Color(1, 0, 0, 1);
@@ -49,20 +48,17 @@ public partial class Point : Button
             GetNode<ColorRect>("ColorRect").Modulate = new Color(1, 1, 1, 1);
         }
     }
+    public void UpdateHovering(bool hovering)
+    {
+        _popupInfo.Visible = hovering;
+    }
 
     public void _on_mouse_entered()
     {
-        _popupInfo.Visible = true;
-        EmitSignal(SignalName.Hovering, this, true);
+       EmitSignal(SignalName.Hovering, this, true);
     }
     public void _on_mouse_exited()
     {
-        _popupInfo.Visible = false;
-        EmitSignal(SignalName.Hovering, this, false);
-    }
-    public void _on_toggled(bool pressed)
-    {
-        UpdateSelection(pressed);
-        EmitSignal(SignalName.Selected, this, pressed);
+       EmitSignal(SignalName.Hovering, this, false);
     }
 }

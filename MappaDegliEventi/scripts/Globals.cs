@@ -10,7 +10,7 @@ namespace Globals
     }
     public static class MapGalleryData
     {
-        public static uint CurrentIdenfier;
+        public static int CurrentIdenfier;
         public static Dictionary<string, Dictionary<string, string>> MapsDict = new Dictionary<string, Dictionary<string, string>> {};
         public static void Add(MapPlotRes mapPlotRes)
         {

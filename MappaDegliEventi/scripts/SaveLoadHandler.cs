@@ -58,7 +58,7 @@ namespace Handlers
 			Error err = config.Load(configFilePath);
 			if (err != Error.Ok) { return; }
 
-			uint lastMapIdenfier = (uint)config.GetValue("maps", "last_identifier");
+			int lastMapIdenfier = (int)config.GetValue("maps", "last_identifier");
 			Globals.MapGalleryData.CurrentIdenfier = lastMapIdenfier+1;
 		}
         static public void CreateMainConfig()
