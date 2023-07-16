@@ -40,7 +40,7 @@ public partial class MappaUI : Control
 		foreach (PointInfo info in pointInfoList)
 		{
 			Point point = _mapPlot.AddedPoint(info);
-			point.Hovering += _mapAndInformationsHandler.UpdateHovering; 
+			point.Hovering += _mapAndInformationsHandler.OnHovering; 
 
 			_pointList.AddAPoint(info);
 		}; 

@@ -31,6 +31,9 @@ public partial class MappaPlot : Control
     public delegate void CreatedAPointEventHandler(Point point);
     [Signal]
     public delegate void PointListButtonDownEventHandler(Point point);
+    [Signal]
+    public delegate void ModifiedPointEventHandler(PointInfo info);
+
 
     public override void _Ready()
     {
@@ -40,8 +43,8 @@ public partial class MappaPlot : Control
         _YTicks = GetNode<Node2D>("%YTicks");
         _Points = GetNode<Node2D>("%Points");
         _GhostPoints = GetNode<Node2D>("%GhostPoints");
-        PackedScene ghost_point_scene = Globals.PackedScenes.GhostPoint;
 
+        PackedScene ghost_point_scene = Globals.PackedScenes.GhostPoint;
 
         _num_of_lines = 2 * _max_value + 1;
         _origin = GetRect().Size / 2;
@@ -127,6 +130,13 @@ public partial class MappaPlot : Control
         Vector2 pos = new Vector2I(x, -y) * _lines_spacing + _origin;
         return pos;
     }
+    private Vector2I _PosToCoords(Vector2 pos)
+    {
+        Vector2 coords_f = (pos-_origin)/_lines_spacing;
+        coords_f = new Vector2(coords_f.X, -coords_f.Y);
+
+        return (Vector2I)coords_f.Round();
+    }
     private Point _CreateAPoint(PointInfo info)
     {
         PackedScene point_scene = Globals.PackedScenes.Point;
@@ -161,7 +171,6 @@ public partial class MappaPlot : Control
         _GhostPointsDict.Add(coords, ghost);
         _selected_ghost_point = null;
     }
-   
     public void Clear()
     {
         foreach (Point point in _Points.GetChildren())
@@ -196,7 +205,27 @@ public partial class MappaPlot : Control
         point.Update(info, _CoordsToPos(info.X, info.Y) - point.Size / 2);
         _RemoveGhost(info);
     }
+    public void DragPointTo(Point point, Vector2 position)
+    {
+        point.GlobalPosition = point.GlobalPosition.Lerp(position, 0.8f);
+    }
+    public void SetUpChangePointPosition(Point point, Vector2 position)
+    {
+        Vector2I coords = _PosToCoords(position-GlobalPosition+point.Size/2);
+        
+        if (!_GhostPointsDict.ContainsKey(coords))
+        {
+            point.Position = _CoordsToPos(point.Info.X, point.Info.Y) - point.Size / 2;
+            return;
+        }
 
+        PointInfo info = new PointInfo(point.Info);
+        info.X = coords.X;
+        info.Y = coords.Y;
+        
+        ModifyPoint(point, info);
+        EmitSignal(SignalName.ModifiedPoint, info);
+    }
     public void OnGhostPointButtonDown(GhostPoint ghost)
     {
         if (_selected_ghost_point != null)
@@ -204,6 +233,10 @@ public partial class MappaPlot : Control
         _selected_ghost_point = ghost;
         EmitSignal(SignalName.GhostPointButtonDown, ghost.Coords, _Points.GetChildCount() + 1);
     }
+    public void ResetPointPosition(Point point)
+    {
+        point.Position = _CoordsToPos(point.Info.X, point.Info.Y) - point.Size / 2;
+    } 
     public void _on_resized()
     {
         Vector2 old_lines_spacing = _lines_spacing;
@@ -244,4 +277,5 @@ public partial class MappaPlot : Control
         Point point = _Points.GetChild<Point>(id - 1);
         EmitSignal(SignalName.PointListButtonDown, point);
     }
+
 }
