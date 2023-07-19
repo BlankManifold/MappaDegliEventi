@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://cu2vt3givdqdv"]
+[gd_scene load_steps=7 format=3 uid="uid://cu2vt3givdqdv"]
 
 [ext_resource type="Script" path="res://scripts/MappaUI.cs" id="1_q5rt5"]
 [ext_resource type="PackedScene" uid="uid://bu5txu8fkd0as" path="res://scenes/MappaPlot.tscn" id="1_uv07d"]
 [ext_resource type="Script" path="res://scripts/MapAndInformationsHandler.cs" id="2_gh3ak"]
 [ext_resource type="PackedScene" uid="uid://bmhfheudgc3mt" path="res://scenes/InformationBox.tscn" id="3_7l7k4"]
+[ext_resource type="PackedScene" uid="uid://d0c12jhrcj3li" path="res://scenes/ChangeColorContainer.tscn" id="3_ipy22"]
 [ext_resource type="PackedScene" uid="uid://26brukp2jnbv" path="res://scenes/PointsList.tscn" id="3_tbdh3"]
 
 [node name="MappaUI" type="Control"]
@@ -47,6 +48,7 @@ max_length = 40
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MainVerticalBox"]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 5
 
 [node name="SaveButton" type="Button" parent="MainVerticalBox/HBoxContainer"]
@@ -61,6 +63,10 @@ text = "Reset"
 [node name="GoBackButton" type="Button" parent="MainVerticalBox/HBoxContainer"]
 layout_mode = 2
 text = "Esci"
+
+[node name="ChangeColorContainer" parent="MainVerticalBox/HBoxContainer" instance=ExtResource("3_ipy22")]
+unique_name_in_owner = true
+layout_mode = 2
 
 [node name="TopQuadrantNames" type="Control" parent="MainVerticalBox"]
 custom_minimum_size = Vector2(0, 20)

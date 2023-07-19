@@ -17,11 +17,10 @@ public partial class PointsList : Button
 		int id = _listContainer.GetChildCount()+1;
 		PackedScene pointListButtonSene = Globals.PackedScenes.PointListButton;
 		PointListButton pointButton = pointListButtonSene.Instantiate<PointListButton>();
-		pointButton.ButtonDown += () => EmitSignal(SignalName.PointListButtonSelected, new Variant[] {id});
-		
 		pointButton.PointId = id;
 		pointButton.PointName = info.name;
-
+		pointButton.ButtonDown += () => EmitSignal(SignalName.PointListButtonSelected, new Variant[] {pointButton.PointId});
+		
 		_listContainer.AddChild(pointButton);
 	}
     public void Clear()

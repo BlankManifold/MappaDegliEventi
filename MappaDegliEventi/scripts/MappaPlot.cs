@@ -6,7 +6,7 @@ public partial class MappaPlot : Control
     private int _max_value = 10;
     [Export]
     private Font _ticks_font = null;
-
+    
     private Node2D _XLines;
     private Node2D _YLines;
     private Node2D _XTicks;
@@ -18,6 +18,7 @@ public partial class MappaPlot : Control
     }
     private Node2D _GhostPoints;
     private Dictionary<Vector2I, GhostPoint> _GhostPointsDict = new Dictionary<Vector2I, GhostPoint> { };
+    private PointsDictionary _PointsDict = new PointsDictionary();
     private Vector2I _x_ticks_padding = new Vector2I(5, 1);
     private Vector2I _y_ticks_padding = new Vector2I(5, 0);
     private Vector2 _origin;
@@ -92,6 +93,7 @@ public partial class MappaPlot : Control
         }
     }
 
+
     private Label _CreateTick(string text, Vector2 position)
     {
         Label tick = new Label();
@@ -144,12 +146,19 @@ public partial class MappaPlot : Control
 
         point.Update(info, _CoordsToPos(info.X, info.Y) - point.Size / 2);
         _Points.AddChild(point);
+       _PointsDict.Add(new Vector2I(info.X, info.Y), point);
 
         return point;
     }
     private void _RemoveGhost(PointInfo info)
     {
         Vector2I coords = new Vector2I(info.X, info.Y);
+        if (!_GhostPointsDict.ContainsKey(coords))
+        {
+            _selected_ghost_point = null;
+            return;
+        }
+ 
         GhostPoint ghost = _GhostPointsDict[coords];
         _GhostPointsDict.Remove(coords);
         ghost.QueueFree();
@@ -160,6 +169,13 @@ public partial class MappaPlot : Control
     {
         // FIXME min tra linespacing e misura std, ma sempre quadrato o simmetrico
         Vector2I coords = new Vector2I(info.X, info.Y);
+        
+        if (_GhostPointsDict.ContainsKey(coords))
+        {
+            _selected_ghost_point = null;
+            return;
+        }
+
         Vector2 size = new Vector2(20, 20);
         Vector2 pos = _CoordsToPos(coords.X, coords.Y) - size / 2;
 
@@ -171,8 +187,13 @@ public partial class MappaPlot : Control
         _GhostPointsDict.Add(coords, ghost);
         _selected_ghost_point = null;
     }
+    
+
     public void Clear()
     {
+        _GhostPointsDict =  new Dictionary<Vector2I, GhostPoint> { }; 
+        _PointsDict.Clear();
+        
         foreach (Point point in _Points.GetChildren())
         {
             _AddGhost(point.Info);
@@ -188,11 +209,16 @@ public partial class MappaPlot : Control
     }
     public void RemovedPoint(Point point)
     {
-        _AddGhost(point.Info);
+        _PointsDict.Remove(point);
+        if (!_PointsDict.HasPoint(new Vector2I(point.Info.X, point.Info.Y)))
+            _AddGhost(point.Info);
+
         int id = point.Info.id;
+
+        _Points.RemoveChild(point);
         point.QueueFree();
 
-        for (int i = id; i < _Points.GetChildCount(); i++)
+        for (int i = id-1; i < _Points.GetChildCount(); i++)
         {
             Point p = _Points.GetChild<Point>(i);
             p.Info.id -= 1;
@@ -201,7 +227,14 @@ public partial class MappaPlot : Control
     }
     public void ModifyPoint(Point point, PointInfo info)
     {
-        _AddGhost(point.Info);
+        Vector2I from = new Vector2I(point.Info.X, point.Info.Y);
+        Vector2I to = new Vector2I(info.X, info.Y);
+        
+        _PointsDict.Move(from, to , point);
+
+        if (!_PointsDict.HasPoint(from))
+            _AddGhost(point.Info);
+        
         point.Update(info, _CoordsToPos(info.X, info.Y) - point.Size / 2);
         _RemoveGhost(info);
     }
@@ -213,11 +246,11 @@ public partial class MappaPlot : Control
     {
         Vector2I coords = _PosToCoords(position-GlobalPosition+point.Size/2);
         
-        if (!_GhostPointsDict.ContainsKey(coords))
-        {
-            point.Position = _CoordsToPos(point.Info.X, point.Info.Y) - point.Size / 2;
-            return;
-        }
+        // if (!_GhostPointsDict.ContainsKey(coords))
+        // {
+        //     point.Position = _CoordsToPos(point.Info.X, point.Info.Y) - point.Size / 2;
+        //     return;
+        // }
 
         PointInfo info = new PointInfo(point.Info);
         info.X = coords.X;
@@ -226,6 +259,31 @@ public partial class MappaPlot : Control
         ModifyPoint(point, info);
         EmitSignal(SignalName.ModifiedPoint, info);
     }
+    public void UpdateNextPointVisibility(PointInfo info, bool visible)
+    {
+        Vector2I coords = new Vector2I(info.X, info.Y);
+
+        if (_PointsDict.HasMulti(coords))
+            _PointsDict.UpdateNextPointVisibility(coords, visible);
+    }
+    public void UpdateMultiPointsOrder(Point point)
+    {
+        Vector2I coords = new Vector2I(point.Info.X, point.Info.Y);
+
+        if (_PointsDict.HasMulti(coords))
+            _PointsDict.UpdateMultiPointsOrder(coords, point);
+    }
+    public Point GoToNextMultiPoint(PointInfo info, bool inverse=false)
+    {
+        Vector2I coords = new Vector2I(info.X, info.Y);
+        return _PointsDict.GoToNextMultiPoint(coords, inverse);
+    }
+    public bool HasMulti(Point point)
+    {
+        Vector2I coords = new Vector2I(point.Info.X, point.Info.Y);
+        return _PointsDict.HasMulti(coords);
+    }
+
     public void OnGhostPointButtonDown(GhostPoint ghost)
     {
         if (_selected_ghost_point != null)

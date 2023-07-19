@@ -1,4 +1,5 @@
 using Godot;
+using System;
 
 public partial class Point : Control
 {
@@ -8,17 +9,38 @@ public partial class Point : Control
         get { return _info; }
     }
     private VBoxContainer _popupInfo;
+    private ColorRect _multiFlagRect;
+    private bool _selected = false;
+    public bool Selected 
+    {
+        get { return _selected; }
+        set 
+        { 
+            _selected = value; 
+            Modulate =  new Color(_info.color, 0.75f+Convert.ToInt32(value)*0.25f);
+        }
+    }
+    private bool _multiFlag = false;
+    public bool MultiFlag 
+    {
+        get { return _multiFlag; }
+        set 
+        { 
+            _multiFlag = value; 
+            _multiFlagRect.Visible = value;
+        }
+    }
 
+    
     [Signal]
     public delegate void HoveringEventHandler(Point point, bool on);
-    [Signal]
-    public delegate void SelectedEventHandler(Point point, bool pressed);
 
     public void Init(PointInfo info)
     {
         _info = info;
         GetNode<Label>("%Name").Text = info.name;
         GetNode<Label>("%IdLabel").Text = info.id.ToString();
+        Modulate = new Color(_info.color, 0.75f+Convert.ToInt32(_selected)*0.25f);
     }
     public void Update(PointInfo info, Vector2 position)
     {
@@ -31,28 +53,33 @@ public partial class Point : Control
     public override void _Ready()
     {
         if (_info == null)
-            _info = new PointInfo(0, "", 0, 0, "");
+            _info = new PointInfo();
         _popupInfo = GetNode<VBoxContainer>("%PopUpInfo");
         _popupInfo.Visible = false;
         AddToGroup("points");
+
+        _multiFlagRect = GetNode<ColorRect>("%MultiFlagRect");
+
+        this.Selected = false;
     }
 
     public void UpdateSelection(bool select)
     {
-        if (select)
-        {
-            GetNode<ColorRect>("ColorRect").Modulate = new Color(1, 0, 0, 1);
-        }
-        else
-        {
-            GetNode<ColorRect>("ColorRect").Modulate = new Color(1, 1, 1, 1);
-        }
+        this.Selected = select;
     }
     public void UpdateHovering(bool hovering)
     {
         _popupInfo.Visible = hovering;
     }
-
+    public void ChangeColor(Color color)
+    {
+        _info.color = color;
+        Modulate = new Color(_info.color, 0.75f+Convert.ToInt32(_selected)*0.25f);
+    }
+    public void ChangeZIndex(int zIndex)
+    {
+        ZIndex = zIndex;
+    }
     public void _on_mouse_entered()
     {
        EmitSignal(SignalName.Hovering, this, true);

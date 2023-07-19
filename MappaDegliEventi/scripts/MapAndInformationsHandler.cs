@@ -5,18 +5,32 @@ namespace Handlers
     public partial class MapAndInformationsHandler : Node
     {
         private Point _selectedPoint = null;
+        public Point SelectedPoint
+        {
+            get { return _selectedPoint; }
+            set
+            {
+                _selectedPoint = value;
+
+                GetTree().CallGroup("points", Point.MethodName.ChangeZIndex, new Variant[] { 0 });
+                if (_selectedPoint != null)
+                    _selectedPoint.ChangeZIndex(1);
+            }
+        }
         private Point _hoveredPoint = null;
         private Point _possibleSelectedPoint = null;
 
         private PointsList _pointsList;
         private InformationBox _informationBox;
         private MappaPlot _mapPlot;
+        private ChangeColorContainer _changeColorContainer;
         private bool _draggable = false;
         private double _clickTime = 0d;
         private double _clickThreshold = 0.5d;
 
-        private enum State { Idle, Selected, Dragging }
+        private enum State { Idle, Selected, Dragging, ColorSelection }
         private State _state = State.Idle;
+        private State _storedState = State.Idle;
         private bool _enableInteraction = false;
         private Vector2 _relativeClickPosition;
 
@@ -25,6 +39,7 @@ namespace Handlers
             _informationBox = GetNode<InformationBox>("%InformationBox");
             _mapPlot = GetNode<MappaPlot>("%MappaPlot");
             _pointsList = GetNode<PointsList>("%PointList");
+            _changeColorContainer = GetNode<ChangeColorContainer>("%ChangeColorContainer");
 
             _mapPlot.PointListButtonDown += OnPointListButtonDown;
             _mapPlot.GhostPointButtonDown += OnGhostPointButtonDown;
@@ -34,6 +49,9 @@ namespace Handlers
             _informationBox.RemovedPoint += OnRemovedPoint;
             _informationBox.ModifiedPoint += OnModifiedPoint;
             _informationBox.ModifiedPoint += OnModifiedPoint;
+
+            _changeColorContainer.ChangedColor += OnChangedPointColor;
+            _changeColorContainer.ColorPickerShow += OnColorPickerShow;
         }
         public override void _PhysicsProcess(double delta)
         {
@@ -43,14 +61,20 @@ namespace Handlers
             {
                 case State.Idle:
                     _HandleIdle();
+                    _storedState = _state;
                     break;
                 case State.Selected:
                     _HandleSelected(delta);
+                    _storedState = _state;
                     break;
                 case State.Dragging:
                     _HandleDragging();
+                    _storedState = _state;
+                    break;
+                case State.ColorSelection:
                     break;
             }
+
         }
 
         private bool _IsMouseHovering()
@@ -129,8 +153,9 @@ namespace Handlers
                         _UpdateSelected(_possibleSelectedPoint);
                     }
 
-                    _state = State.Dragging;
                     _clickTime = 0d;
+                    _state = State.Dragging;
+                    _mapPlot.UpdateNextPointVisibility(_selectedPoint.Info, true);
                 }
 
                 return;
@@ -139,6 +164,26 @@ namespace Handlers
             // se muovo mouse anche prima di timer 
             // -> vai subito a dragging
 
+            // se sono su una selezione multipla e vado a selezioni sotto
+            // -> cambia selezione a punto subito successivo (ciclico)        
+            if (Input.IsActionJustPressed("next_multi_point"))
+            {
+                if (_mapPlot.HasMulti(_selectedPoint))
+                {
+                    _selectedPoint.Visible = false;
+                    _UpdateSelected(_mapPlot.GoToNextMultiPoint(_selectedPoint.Info));
+                    _selectedPoint.Visible = true;
+                }
+            }
+            if (Input.IsActionJustPressed("previsous_multi_point"))
+            {
+                if (_mapPlot.HasMulti(_selectedPoint))
+                {
+                    _selectedPoint.Visible = false;
+                    _UpdateSelected(_mapPlot.GoToNextMultiPoint(_selectedPoint.Info, true));
+                    _selectedPoint.Visible = true;
+                }
+            }
 
         }
         private void _HandleDragging()
@@ -146,6 +191,8 @@ namespace Handlers
             if (!_enableInteraction)
             {
                 _mapPlot.ResetPointPosition(_selectedPoint);
+                _mapPlot.UpdateNextPointVisibility(_selectedPoint.Info, false);
+
                 _state = State.Selected;
                 return;
             }
@@ -183,14 +230,15 @@ namespace Handlers
 
             point.UpdateSelection(true);
             _informationBox.UpdateSelection(point);
-            _selectedPoint = point;
-
+            this.SelectedPoint = point;
+            _changeColorContainer.Enabled = true;
         }
         private void _DeselectCurrent()
         {
             _selectedPoint.UpdateSelection(false);
-            _selectedPoint = null;
+            this.SelectedPoint = null;
             _possibleSelectedPoint = null;
+            _changeColorContainer.Enabled = false;
         }
         private void _GoIdle()
         {
@@ -220,8 +268,8 @@ namespace Handlers
         }
         public void OnRemovedPoint()
         {
-            _mapPlot.RemovedPoint(_selectedPoint);
             _pointsList.RemovePoint(_selectedPoint.Info.id);
+            _mapPlot.RemovedPoint(_selectedPoint);
             _DeselectCurrent();
 
             _GoIdle();
@@ -239,7 +287,17 @@ namespace Handlers
         public void OnPointListButtonDown(Point point)
         {
             _UpdateSelected(point);
-            _GoIdle();
+
+            if (_selectedPoint != null)
+            {
+                _selectedPoint.Visible = true;
+                _mapPlot.UpdateMultiPointsOrder(_selectedPoint);
+                _mapPlot.UpdateNextPointVisibility(_selectedPoint.Info, false);
+                _state = State.Selected;
+                return;
+            }
+
+            _state = State.Idle;
         }
         public void OnGhostPointButtonDown(Vector2I coords, int id)
         {
@@ -251,6 +309,27 @@ namespace Handlers
 
             _informationBox.ActiveAddPointState(coords, id);
         }
+        public void OnChangedPointColor(Color color, bool allPoints)
+        {
+            if (!allPoints)
+            {
+                _selectedPoint.ChangeColor(color);
+                return;
+            }
+
+            GetTree().CallGroup("points", Point.MethodName.ChangeColor, new Variant[] { color });
+        }
+        public void OnColorPickerShow(bool hide)
+        {
+            if (hide)
+            {
+                _state = _storedState;
+                return;
+            }
+
+            _state = State.ColorSelection;
+        }
+
     }
 
 

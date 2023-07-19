@@ -1,0 +1,67 @@
+[gd_scene load_steps=2 format=3 uid="uid://d0c12jhrcj3li"]
+
+[ext_resource type="Script" path="res://scripts/ChangeColorContainer.cs" id="1_a1qtt"]
+
+[node name="ChangeColorContainer" type="HBoxContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+script = ExtResource("1_a1qtt")
+
+[node name="ColorPickerWindow" type="Window" parent="."]
+unique_name_in_owner = true
+title = "Seleziona colore punto"
+initial_position = 1
+size = Vector2i(290, 413)
+visible = false
+wrap_controls = true
+always_on_top = true
+popup_window = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ColorPickerWindow"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="ColorPicker" type="ColorPicker" parent="ColorPickerWindow/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+alignment = 1
+edit_alpha = false
+deferred_mode = true
+picker_shape = 2
+color_modes_visible = false
+sliders_visible = false
+hex_visible = false
+
+[node name="ChangeAllColorButton" type="Button" parent="ColorPickerWindow/VBoxContainer"]
+layout_mode = 2
+text = "Applica a tutti"
+
+[node name="ColorPickerButton" type="Button" parent="."]
+layout_mode = 2
+text = "Colore"
+icon_alignment = 1
+
+[node name="RecentColorButton" type="Button" parent="."]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+
+[node name="RecentColorRect" type="ColorRect" parent="RecentColorButton"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[connection signal="close_requested" from="ColorPickerWindow" to="." method="_on_color_picker_window_close_requested"]
+[connection signal="color_changed" from="ColorPickerWindow/VBoxContainer/ColorPicker" to="." method="_on_color_picker_color_changed"]
+[connection signal="button_down" from="ColorPickerWindow/VBoxContainer/ChangeAllColorButton" to="." method="_on_change_all_color_button_button_down"]
+[connection signal="button_down" from="ColorPickerButton" to="." method="_on_color_picker_button_button_down"]
+[connection signal="button_down" from="RecentColorButton" to="." method="_on_recent_color_button_button_down"]

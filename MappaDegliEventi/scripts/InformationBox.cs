@@ -65,13 +65,14 @@ public partial class InformationBox : Button
         _modifyButton = GetNode<Button>("%ModifyPoint");
         _removeButton = GetNode<Button>("%RemovePoint");
 
-        _info = new PointInfo(0, "", 0, 0, "");
+        _info = new PointInfo();
         _informationContainer.Visible = false;
     }
 
     public void Update(PointInfo info)
     {
         _info = new PointInfo(info);
+        
         _idLabel.Text = _info.id.ToString();
         _nameLabel.Text = _info.name;
         _impactSpinBox.Value = _info.X;
