@@ -141,12 +141,14 @@ namespace Handlers
                 return;
             }
 
-            // se tengo premuto 
+            // se tengo premuto abbastanza o mi muovo abbastanza (possible punto gia cliccato)
             // -> cambio selezione (se necessario) e vai a dragging
             if (Input.IsActionPressed("point_selected"))
             {
                 _clickTime += delta;
-                if (_clickTime >= _clickThreshold)
+                Vector2 shift = _relativeClickPosition - (GetViewport().GetMousePosition() - _possibleSelectedPoint.GlobalPosition);
+
+                if (_clickTime >= _clickThreshold || (shift.Dot(shift) > 10))
                 {
                     if (_selectedPoint != _possibleSelectedPoint)
                     {
@@ -157,12 +159,8 @@ namespace Handlers
                     _state = State.Dragging;
                     _mapPlot.UpdateNextPointVisibility(_selectedPoint.Info, true);
                 }
-
                 return;
             }
-
-            // se muovo mouse anche prima di timer 
-            // -> vai subito a dragging
 
             // se sono su una selezione multipla e vado a selezioni sotto
             // -> cambia selezione a punto subito successivo (ciclico)        
@@ -246,11 +244,13 @@ namespace Handlers
             _state = State.Idle;
         }
 
+
         public void Clear()
         {
             _selectedPoint = null;
             _hoveredPoint = null;
         }
+
 
         public void OnHovering(Point point, bool hovering)
         {
