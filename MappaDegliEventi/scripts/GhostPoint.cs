@@ -1,12 +1,11 @@
 using Godot;
-using System;
 
 public partial class GhostPoint : Button
 {
 	private ColorRect _colorRect;
 	private float _focused_alpha = 0.5f;
 	private Vector2I _coords;
-	public Vector2I Coords {get{return _coords;}}
+	public Vector2I Coords { get { return _coords; } }
 	private bool _selected = false;
 
 	[Signal]
@@ -19,11 +18,11 @@ public partial class GhostPoint : Button
 		Position = position;
 		_coords = coords;
 	}
-    public override void _Ready()
-    {
+	public override void _Ready()
+	{
 		_colorRect = GetNode<ColorRect>("%ColorRect");
 		_colorRect.Color = new Color(_colorRect.Color, 0f);
-    }
+	}
 
 	public void Deselect()
 	{

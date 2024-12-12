@@ -1,3 +1,4 @@
+using System.Linq;
 using Godot;
 
 public partial class PointsList : Button
@@ -5,27 +6,27 @@ public partial class PointsList : Button
 	private VBoxContainer _listContainer;
 
 	[Signal]
-    public delegate void PointListButtonSelectedEventHandler(int id);
-	
+	public delegate void PointListButtonSelectedEventHandler(int id);
+
 	public override void _Ready()
-    {
+	{
 		_listContainer = GetNode<VBoxContainer>("%ListContainer");
-    }
-	
+	}
+
 	public void AddAPoint(PointInfo info)
 	{
-		int id = _listContainer.GetChildCount()+1;
+		int id = _listContainer.GetChildCount() + 1;
 		PackedScene pointListButtonSene = Globals.PackedScenes.PointListButton;
 		PointListButton pointButton = pointListButtonSene.Instantiate<PointListButton>();
 		pointButton.PointId = id;
-		pointButton.PointName = info.name;
-		pointButton.ButtonDown += () => EmitSignal(SignalName.PointListButtonSelected, new Variant[] {pointButton.PointId});
-		
+		pointButton.PointName = info.Name;
+		pointButton.ButtonDown += () => EmitSignal(SignalName.PointListButtonSelected, new Variant[] { pointButton.PointId });
+
 		_listContainer.AddChild(pointButton);
 	}
-    public void Clear()
+	public void Clear()
 	{
-		foreach (PointListButton pointButton in _listContainer.GetChildren())
+		foreach (PointListButton pointButton in _listContainer.GetChildren().Cast<PointListButton>())
 		{
 			_listContainer.RemoveChild(pointButton);
 			pointButton.QueueFree();
@@ -34,15 +35,15 @@ public partial class PointsList : Button
 	}
 	public void ModifyPoint(PointInfo info)
 	{
-		_listContainer.GetChild<PointListButton>(info.id-1).PointName = info.name;
+		_listContainer.GetChild<PointListButton>(info.Id - 1).PointName = info.Name;
 	}
 	public void RemovePoint(int id)
 	{
-		PointListButton childToBeRemoved = _listContainer.GetChild<PointListButton>(id-1);
+		PointListButton childToBeRemoved = _listContainer.GetChild<PointListButton>(id - 1);
 		_listContainer.RemoveChild(childToBeRemoved);
 		childToBeRemoved.QueueFree();
 
-		for (int i = id-1; i < _listContainer.GetChildCount(); i++)
+		for (int i = id - 1; i < _listContainer.GetChildCount(); i++)
 		{
 			PointListButton pointButton = _listContainer.GetChild<PointListButton>(i);
 			pointButton.PointId -= 1;

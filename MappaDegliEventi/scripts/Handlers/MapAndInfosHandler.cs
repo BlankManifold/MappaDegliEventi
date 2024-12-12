@@ -2,8 +2,9 @@ using Godot;
 
 namespace Handlers
 {
-    public partial class MapAndInformationsHandler : Node
+    public partial class MapAndInfosHandler : Node
     {
+        #region Members and signals
         private Point _selectedPoint = null;
         public Point SelectedPoint
         {
@@ -13,8 +14,7 @@ namespace Handlers
                 _selectedPoint = value;
 
                 GetTree().CallGroup("points", Point.MethodName.ChangeZIndex, new Variant[] { 0 });
-                if (_selectedPoint != null)
-                    _selectedPoint.ChangeZIndex(1);
+                _selectedPoint?.ChangeZIndex(1);
             }
         }
         private Point _hoveredPoint = null;
@@ -33,6 +33,7 @@ namespace Handlers
         private State _storedState = State.Idle;
         private bool _enableInteraction = false;
         private Vector2 _relativeClickPosition;
+        #endregion
 
         public override void _Ready()
         {
@@ -76,7 +77,13 @@ namespace Handlers
             }
 
         }
+        public void Clear()
+        {
+            _selectedPoint = null;
+            _hoveredPoint = null;
+        }
 
+        #region Private methods
         private bool _IsMouseHovering()
         {
             Vector2 mousePosition = GetViewport().GetMousePosition();
@@ -148,6 +155,7 @@ namespace Handlers
                 _clickTime += delta;
                 Vector2 shift = _relativeClickPosition - (GetViewport().GetMousePosition() - _possibleSelectedPoint.GlobalPosition);
 
+                //TODO Verificare che quel 10 va bene sempre o dipende da dim mappa/window
                 if (_clickTime >= _clickThreshold || (shift.Dot(shift) > 10))
                 {
                     if (_selectedPoint != _possibleSelectedPoint)
@@ -221,10 +229,7 @@ namespace Handlers
                 return;
             }
 
-            if (_selectedPoint != null)
-            {
-                _selectedPoint.UpdateSelection(false);
-            }
+            _selectedPoint?.UpdateSelection(false);
 
             point.UpdateSelection(true);
             _informationBox.UpdateSelection(point);
@@ -243,15 +248,9 @@ namespace Handlers
             _possibleSelectedPoint = null;
             _state = State.Idle;
         }
+        #endregion
 
-
-        public void Clear()
-        {
-            _selectedPoint = null;
-            _hoveredPoint = null;
-        }
-
-
+        #region Response to signals
         public void OnHovering(Point point, bool hovering)
         {
             _UpdateHovering(point, hovering);
@@ -268,7 +267,7 @@ namespace Handlers
         }
         public void OnRemovedPoint()
         {
-            _pointsList.RemovePoint(_selectedPoint.Info.id);
+            _pointsList.RemovePoint(_selectedPoint.Info.Id);
             _mapPlot.RemovedPoint(_selectedPoint);
             _DeselectCurrent();
 
@@ -329,8 +328,6 @@ namespace Handlers
 
             _state = State.ColorSelection;
         }
-
+        #endregion
     }
-
-
 }

@@ -8,7 +8,7 @@ public partial class MappaUI : Control
 	private MappaPlot _mapPlot;
 	private PointsList _pointList;
 
-	private Handlers.MapAndInformationsHandler _mapAndInformationsHandler;
+	private Handlers.MapAndInfosHandler _MapAndInfosHandler;
 
 	[Signal]
 	public delegate void ReadyToLoadFromResourceEventHandler();
@@ -20,17 +20,17 @@ public partial class MappaUI : Control
 		await ToSignal(this, SignalName.ReadyToLoadFromResource);
 		_LoadMapFromResource(mapPlotRes);
 	}
-    public override void _Ready()
-    {
-		_mapAndInformationsHandler = GetNode<Handlers.MapAndInformationsHandler>("%MapAndInformationsHandler");
+	public override void _Ready()
+	{
+		_MapAndInfosHandler = GetNode<Handlers.MapAndInfosHandler>("%MapAndInfosHandler");
 
-        _informationBox = GetNode<InformationBox>("%InformationBox");
-        _mappaNameLineEdit = GetNode<LineEdit>("%MappaName");
-        _mapPlot = GetNode<MappaPlot>("%MappaPlot");
-        _pointList = GetNode<PointsList>("%PointList");
+		_informationBox = GetNode<InformationBox>("%InformationBox");
+		_mappaNameLineEdit = GetNode<LineEdit>("%MappaName");
+		_mapPlot = GetNode<MappaPlot>("%MappaPlot");
+		_pointList = GetNode<PointsList>("%PointList");
 
 		EmitSignal(SignalName.ReadyToLoadFromResource);
-    }
+	}
 	private void _LoadMapFromResource(MapPlotRes mapPlotRes)
 	{
 		_mappaNameLineEdit.Text = mapPlotRes.MapName;
@@ -40,10 +40,10 @@ public partial class MappaUI : Control
 		foreach (PointInfo info in pointInfoList)
 		{
 			Point point = _mapPlot.AddedPoint(info);
-			point.Hovering += _mapAndInformationsHandler.OnHovering; 
+			point.Hovering += _MapAndInfosHandler.OnHovering;
 
 			_pointList.AddAPoint(info);
-		}; 
+		};
 	}
 	public void _on_save_button_button_down()
 	{
@@ -58,7 +58,7 @@ public partial class MappaUI : Control
 		_mapPlot.Clear();
 		_informationBox.Clear();
 		_pointList.Clear();
-		_mapAndInformationsHandler.Clear();
+		_MapAndInfosHandler.Clear();
 	}
-	
+
 }

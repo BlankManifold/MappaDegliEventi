@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/MappaUI.cs" id="1_q5rt5"]
 [ext_resource type="PackedScene" uid="uid://bu5txu8fkd0as" path="res://scenes/MappaPlot.tscn" id="1_uv07d"]
-[ext_resource type="Script" path="res://scripts/MapAndInformationsHandler.cs" id="2_gh3ak"]
+[ext_resource type="Script" path="res://scripts/MapAndInfosHandler.cs" id="2_gh3ak"]
 [ext_resource type="PackedScene" uid="uid://bmhfheudgc3mt" path="res://scenes/InformationBox.tscn" id="3_7l7k4"]
 [ext_resource type="PackedScene" uid="uid://d0c12jhrcj3li" path="res://scenes/ChangeColorContainer.tscn" id="3_ipy22"]
 [ext_resource type="PackedScene" uid="uid://26brukp2jnbv" path="res://scenes/PointsList.tscn" id="3_tbdh3"]
@@ -17,11 +17,11 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_q5rt5")
 
-[node name="MapAndInformationsHandler" type="Node" parent="."]
+[node name="MapAndInfosHandler" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("2_gh3ak")
 
-[node name="DebugLabel" type="Label" parent="MapAndInformationsHandler"]
+[node name="DebugLabel" type="Label" parent="MapAndInfosHandler"]
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0

@@ -4,20 +4,20 @@ using System.Collections.Generic;
 
 namespace Globals
 {
-    public struct GameInfo
+    public readonly struct GameInfo
     {
-        public static string Version = "0.1"; 
+        public static readonly string Version = "0.1";
     }
     public static class MapGalleryData
     {
         public static int CurrentIdenfier;
-        public static Dictionary<string, Dictionary<string, string>> MapsDict = new Dictionary<string, Dictionary<string, string>> {};
+        public static Dictionary<string, Dictionary<string, string>> MapsDict = new Dictionary<string, Dictionary<string, string>> { };
         public static void Add(MapPlotRes mapPlotRes)
         {
-            MapsDict[mapPlotRes.Identifier] = new Dictionary<string, string> 
+            MapsDict[mapPlotRes.Identifier] = new Dictionary<string, string>
             {
-                ["name"]= mapPlotRes.MapName,
-                ["album"]= "",
+                ["name"] = mapPlotRes.MapName,
+                ["album"] = "",
             };
         }
         public static void Remove(string identifier)
@@ -27,18 +27,18 @@ namespace Globals
     }
     public static class PackedScenes
     {
-        public static PackedScene Point = (PackedScene)ResourceLoader.Load("res://scenes/Point.tscn");
-        public static PackedScene PointListButton = (PackedScene)ResourceLoader.Load("res://scenes/PointListButton.tscn");
-        public static PackedScene GhostPoint = (PackedScene)ResourceLoader.Load("res://scenes/GhostPoint.tscn");
-        public static PackedScene MappaUI = (PackedScene)ResourceLoader.Load("res://scenes/MappaUI.tscn");
-        public static PackedScene MapsGallery = (PackedScene)ResourceLoader.Load("res://scenes/MapsGallery.tscn");
-        public static PackedScene GalleryMapButton = (PackedScene)ResourceLoader.Load("res://scenes/GalleryMapButton.tscn");
-        public static PackedScene MainMenu = (PackedScene)ResourceLoader.Load("res://scenes/MainMenu.tscn");
+        public readonly static PackedScene Point = (PackedScene)ResourceLoader.Load("res://scenes/Point.tscn");
+        public readonly static PackedScene PointListButton = (PackedScene)ResourceLoader.Load("res://scenes/PointListButton.tscn");
+        public readonly static PackedScene GhostPoint = (PackedScene)ResourceLoader.Load("res://scenes/GhostPoint.tscn");
+        public readonly static PackedScene MappaUI = (PackedScene)ResourceLoader.Load("res://scenes/MappaUI.tscn");
+        public readonly static PackedScene MapsGallery = (PackedScene)ResourceLoader.Load("res://scenes/MapsGallery.tscn");
+        public readonly static PackedScene GalleryMapButton = (PackedScene)ResourceLoader.Load("res://scenes/GalleryMapButton.tscn");
+        public readonly static PackedScene MainMenu = (PackedScene)ResourceLoader.Load("res://scenes/MainMenu.tscn");
     }
-    public struct Paths
+    public static class Paths
     {
-        public static string SaveMappaPlot = "user://maps";
-        public static string SaveConfigs = "user://configs";
+        public readonly static string SaveMappaPlot = "user://maps";
+        public readonly static string SaveConfigs = "user://configs";
         // public static string MappaPlotResScript = "res://scripts/MapPlotRes.cs";
     }
 }

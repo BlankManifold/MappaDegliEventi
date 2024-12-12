@@ -11,44 +11,44 @@ public partial class Point : Control
     private VBoxContainer _popupInfo;
     private ColorRect _multiFlagRect;
     private bool _selected = false;
-    public bool Selected 
+    public bool Selected
     {
         get { return _selected; }
-        set 
-        { 
-            _selected = value; 
-            Modulate =  new Color(_info.color, 0.75f+Convert.ToInt32(value)*0.25f);
+        set
+        {
+            _selected = value;
+            Modulate = new Color(_info.Color, 0.75f + Convert.ToInt32(value) * 0.25f);
         }
     }
     private bool _multiFlag = false;
-    public bool MultiFlag 
+    public bool MultiFlag
     {
         get { return _multiFlag; }
-        set 
-        { 
-            _multiFlag = value; 
+        set
+        {
+            _multiFlag = value;
             _multiFlagRect.Visible = value;
         }
     }
 
-    
+
     [Signal]
     public delegate void HoveringEventHandler(Point point, bool on);
 
     public void Init(PointInfo info)
     {
         _info = info;
-        GetNode<Label>("%Name").Text = info.name;
-        GetNode<Label>("%IdLabel").Text = info.id.ToString();
-        Modulate = new Color(_info.color, 0.75f+Convert.ToInt32(_selected)*0.25f);
+        GetNode<Label>("%Name").Text = info.Name;
+        GetNode<Label>("%IdLabel").Text = info.Id.ToString();
+        Modulate = new Color(_info.Color, 0.75f + Convert.ToInt32(_selected) * 0.25f);
     }
     public void Update(PointInfo info, Vector2 position)
     {
         Position = position;
         _info = info;
         AddToGroup("points");
-        GetNode<Label>("%Name").Text = info.name;
-        GetNode<Label>("%IdLabel").Text = info.id.ToString();
+        GetNode<Label>("%Name").Text = info.Name;
+        GetNode<Label>("%IdLabel").Text = info.Id.ToString();
     }
     public override void _Ready()
     {
@@ -73,8 +73,8 @@ public partial class Point : Control
     }
     public void ChangeColor(Color color)
     {
-        _info.color = color;
-        Modulate = new Color(_info.color, 0.75f+Convert.ToInt32(_selected)*0.25f);
+        _info.Color = color;
+        Modulate = new Color(_info.Color, 0.75f + Convert.ToInt32(_selected) * 0.25f);
     }
     public void ChangeZIndex(int zIndex)
     {
@@ -82,10 +82,10 @@ public partial class Point : Control
     }
     public void _on_mouse_entered()
     {
-       EmitSignal(SignalName.Hovering, this, true);
+        EmitSignal(SignalName.Hovering, this, true);
     }
     public void _on_mouse_exited()
     {
-       EmitSignal(SignalName.Hovering, this, false);
+        EmitSignal(SignalName.Hovering, this, false);
     }
 }

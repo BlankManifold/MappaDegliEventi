@@ -22,7 +22,7 @@ public struct PointsDictionary
             return;
         }
 
-        _dict[coords] = new List<Point>() {point};
+        _dict[coords] = new List<Point>() { point };
         point.MultiFlag = false;
     }
 
@@ -49,7 +49,7 @@ public struct PointsDictionary
     }
     public void Remove(Point point)
     {
-        Vector2I coords = new Vector2I(point.Info.X, point.Info.Y);
+        Vector2I coords = new(point.Info.X, point.Info.Y);
         Remove(coords, point);
     }
 
@@ -64,7 +64,7 @@ public struct PointsDictionary
         if (!_dict.ContainsKey(coords))
             return false;
 
-        return (_dict[coords].Count > 1);
+        return _dict[coords].Count > 1;
     }
     public bool HasPoint(Vector2I coords)
     {
@@ -72,7 +72,7 @@ public struct PointsDictionary
     }
     public void Clear()
     {
-        _dict = new Dictionary<Vector2I, List<Point>> {};
+        _dict = new Dictionary<Vector2I, List<Point>> { };
     }
     public void UpdateNextPointVisibility(Vector2I coords, bool visible)
     {
@@ -83,13 +83,13 @@ public struct PointsDictionary
         _dict[coords].Remove(point);
         _dict[coords].Add(point);
     }
-    public Point GoToNextMultiPoint(Vector2I coords, bool inverse=false)
+    public Point GoToNextMultiPoint(Vector2I coords, bool inverse = false)
     {
         if (!inverse)
         {
-            Point lastPoint = _dict[coords][_dict[coords].Count-1];
+            Point lastPoint = _dict[coords][_dict[coords].Count - 1];
             _dict[coords].Remove(lastPoint);
-            _dict[coords].Insert(0,lastPoint);
+            _dict[coords].Insert(0, lastPoint);
         }
         else
         {
@@ -98,10 +98,10 @@ public struct PointsDictionary
             _dict[coords].Add(firstPoint);
         }
 
-        return _dict[coords][_dict[coords].Count-1];
+        return _dict[coords][_dict[coords].Count - 1];
     }
     public PointsDictionary()
     {
-        _dict = new Dictionary<Vector2I, List<Point>> {};
+        _dict = new Dictionary<Vector2I, List<Point>> { };
     }
 }

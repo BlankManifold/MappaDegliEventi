@@ -1,2 +1,7 @@
 # Godot 4+ specific ignores
 .godot/
+
+#VSCode
+.vscode
+.DS_Store
+MappaDegliEventi/.DS_Store

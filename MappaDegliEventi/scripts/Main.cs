@@ -14,9 +14,10 @@ public partial class Main : Node
 
         _currentSceneContainer = GetNode<MarginContainer>("%CurrentSceneContainer");
 
-       _GoToMainMenu();
+        _GoToMainMenu();
     }
 
+    #region Private methods
     private void _RemoveCurrentScene()
     {
         if (_currentScene != null)
@@ -60,8 +61,9 @@ public partial class Main : Node
         mapsGalleryScene.GoBackButtonDown += OnMapsGalleryGoBackButtonDown;
         _AddNewScene(mapsGalleryScene);
     }
-    
-    
+    #endregion
+
+    #region Response to signals
     public void OnMainMenuButtonDown(string name)
     {
         switch (name)
@@ -88,4 +90,5 @@ public partial class Main : Node
     {
         _GoToMainMenu();
     }
+    #endregion
 }

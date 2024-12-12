@@ -72,22 +72,22 @@ public partial class InformationBox : Button
     public void Update(PointInfo info)
     {
         _info = new PointInfo(info);
-        
-        _idLabel.Text = _info.id.ToString();
-        _nameLabel.Text = _info.name;
+
+        _idLabel.Text = _info.Id.ToString();
+        _nameLabel.Text = _info.Name;
         _impactSpinBox.Value = _info.X;
         _intensitySpinBox.Value = _info.Y;
-        _descriptionLabel.Text = _info.description;
+        _descriptionLabel.Text = _info.Description;
     }
     public void Update(Vector2I coords, int id)
     {
         _info.Clear();
 
-        _info.id = id;
+        _info.Id = id;
         _info.X = coords.X;
         _info.Y = coords.Y;
 
-        _idLabel.Text = _info.id.ToString();
+        _idLabel.Text = _info.Id.ToString();
         _nameLabel.Text = "";
         _impactSpinBox.Value = _info.X;
         _intensitySpinBox.Value = _info.Y;
@@ -134,11 +134,11 @@ public partial class InformationBox : Button
 
     public void _on_add_point_button_down()
     {
-        _info.id = _idLabel.Text.ToInt();
-        _info.name = _nameLabel.Text;
+        _info.Id = _idLabel.Text.ToInt();
+        _info.Name = _nameLabel.Text;
         _info.X = (int)_impactSpinBox.Value;
         _info.Y = (int)_intensitySpinBox.Value;
-        _info.description = _descriptionLabel.Text;
+        _info.Description = _descriptionLabel.Text;
 
         this.State = ButtonsState.Modify;
         CallDeferred(MethodName.FocusNameLineEdit);
@@ -146,11 +146,11 @@ public partial class InformationBox : Button
     }
     public void _on_modify_point_button_down()
     {
-        _info.id = _idLabel.Text.ToInt();
-        _info.name = _nameLabel.Text;
+        _info.Id = _idLabel.Text.ToInt();
+        _info.Name = _nameLabel.Text;
         _info.X = (int)_impactSpinBox.Value;
         _info.Y = (int)_intensitySpinBox.Value;
-        _info.description = _descriptionLabel.Text;
+        _info.Description = _descriptionLabel.Text;
 
         EmitSignal(SignalName.ModifiedPoint, new PointInfo(_info));
         this.State = ButtonsState.Modify;
