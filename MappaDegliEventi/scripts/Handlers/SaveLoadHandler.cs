@@ -4,8 +4,9 @@ using System.Linq;
 
 namespace Handlers
 {
-	public partial class SaveLoadHandler : Node
+	public static class SaveLoadHandler
 	{
+		static private readonly string _mainConfigFileName = "main_config.cfg";
 		static public void SaveMapPlot(Godot.Collections.Array<Node> points, string name, string identifier = null)
 		{
 			MapPlotRes mapPlotRes = new()
@@ -26,15 +27,15 @@ namespace Handlers
 			{
 				mapPlotRes.PointInfoList.Add(point.Info);
 			}
-			System.IO.Directory.CreateDirectory(Globals.Paths.SaveMappaPlot);
-			string file_path = System.IO.Path.Combine(Globals.Paths.SaveMappaPlot, $"map_{mapPlotRes.Identifier}.tres");
+			System.IO.Directory.CreateDirectory(Globals.Paths.SaveMapPlot);
+			string file_path = System.IO.Path.Combine(Globals.Paths.SaveMapPlot, $"map_{mapPlotRes.Identifier}.tres");
 			ResourceSaver.Save(mapPlotRes, file_path);
 
 			Globals.MapGalleryData.Add(mapPlotRes);
 		}
 		static public MapPlotRes LoadMapPlot(string identifier)
 		{
-			string file_path = System.IO.Path.Combine(Globals.Paths.SaveMappaPlot, $"map_{identifier}.tres");
+			string file_path = System.IO.Path.Combine(Globals.Paths.SaveMapPlot, $"map_{identifier}.tres");
 			if (!ResourceLoader.Exists(file_path))
 			{
 				return null;
@@ -46,16 +47,16 @@ namespace Handlers
 		static public void RemoveMapPlot(string identifier)
 		{
 			string fname = $"map_{identifier}.tres";
-			string file_path = System.IO.Path.Combine(Globals.Paths.SaveMappaPlot, fname);
+			string file_path = System.IO.Path.Combine(Globals.Paths.SaveMapPlot, fname);
 			if (ResourceLoader.Exists(file_path))
 			{
-				DirAccess.Open(Globals.Paths.SaveMappaPlot).Remove(fname);
+				DirAccess.Open(Globals.Paths.SaveMapPlot).Remove(fname);
 				return;
 			}
 		}
 		static public void LoadMainConfig()
 		{
-			string configFilePath = System.IO.Path.Combine(Globals.Paths.SaveConfigs, $"main_config.cfg");
+			string configFilePath = System.IO.Path.Combine(Globals.Paths.SaveConfigs, _mainConfigFileName);
 			ConfigFile config = new();
 			Error err = config.Load(configFilePath);
 			if (err != Error.Ok) { return; }
@@ -72,7 +73,7 @@ namespace Handlers
 			DirAccess dirAccess = DirAccess.Open("user://");
 			dirAccess.MakeDir("configs");
 
-			string configFilePath = System.IO.Path.Combine(Globals.Paths.SaveConfigs, $"main_config.cfg");
+			string configFilePath = System.IO.Path.Combine(Globals.Paths.SaveConfigs, _mainConfigFileName);
 			ConfigFile config = new();
 
 			config.SetValue("maps", "last_identifier", 0);
@@ -80,7 +81,7 @@ namespace Handlers
 		}
 		static public void CreateSaveMapDir()
 		{
-			if (DirAccess.Open(Globals.Paths.SaveMappaPlot) != null)
+			if (DirAccess.Open(Globals.Paths.SaveMapPlot) != null)
 			{
 				return;
 			}
@@ -89,7 +90,7 @@ namespace Handlers
 		}
 		static private void _UpdateLastIdenfierMainConfig()
 		{
-			string configFilePath = System.IO.Path.Combine(Globals.Paths.SaveConfigs, $"main_config.cfg");
+			string configFilePath = System.IO.Path.Combine(Globals.Paths.SaveConfigs, _mainConfigFileName);
 			ConfigFile config = new();
 
 			Error err = config.Load(configFilePath);
@@ -101,9 +102,9 @@ namespace Handlers
 		static public void LoadMapGalleryData()
 		{
 			// foreach (string path in System.IO.Directory.GetFiles("/Users/lucastefanelli/Library/Application Support/Godot/app_userdata/MappaDegliEventi/maps"))
-			foreach (string path in DirAccess.Open(Globals.Paths.SaveMappaPlot).GetFiles())
+			foreach (string path in DirAccess.Open(Globals.Paths.SaveMapPlot).GetFiles())
 			{
-				string file_path = System.IO.Path.Combine(Globals.Paths.SaveMappaPlot, path);
+				string file_path = System.IO.Path.Combine(Globals.Paths.SaveMapPlot, path);
 				MapPlotRes mapPlotRes = ResourceLoader.Load<MapPlotRes>(file_path, cacheMode: ResourceLoader.CacheMode.Ignore);
 				Globals.MapGalleryData.Add(mapPlotRes);
 			}

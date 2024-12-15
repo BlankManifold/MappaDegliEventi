@@ -4,15 +4,14 @@ public partial class Main : Node
 {
     private Node _currentScene;
     private MarginContainer _currentSceneContainer;
-    private Handlers.SaveLoadHandler _saveLoadHandler;
+
     public override void _Ready()
     {
-        // _saveLoadHandler = GetNode<Handlers.SaveLoadHandler>("%SaveLoadHandler");
-        // Handlers.SaveLoadHandler.CreateMainConfig();
-        // Handlers.SaveLoadHandler.LoadMainConfig();
-        // Handlers.SaveLoadHandler.CreateSaveMapDir();
+        Handlers.SaveLoadHandler.CreateMainConfig();
+        Handlers.SaveLoadHandler.LoadMainConfig();
+        Handlers.SaveLoadHandler.CreateSaveMapDir();
 
-        // Handlers.SaveLoadHandler.LoadMapGalleryData();
+        Handlers.SaveLoadHandler.LoadMapGalleryData();
 
         _currentSceneContainer = GetNode<MarginContainer>("%CurrentSceneContainer");
 
