@@ -30,7 +30,7 @@ namespace Globals
         public readonly static PackedScene Point = (PackedScene)ResourceLoader.Load("res://scenes/Point.tscn");
         public readonly static PackedScene PointListButton = (PackedScene)ResourceLoader.Load("res://scenes/PointListButton.tscn");
         public readonly static PackedScene GhostPoint = (PackedScene)ResourceLoader.Load("res://scenes/GhostPoint.tscn");
-        public readonly static PackedScene MappaUI = (PackedScene)ResourceLoader.Load("res://scenes/MappaUI.tscn");
+        public readonly static PackedScene MapUI = (PackedScene)ResourceLoader.Load("res://scenes/MapUI.tscn");
         public readonly static PackedScene MapsGallery = (PackedScene)ResourceLoader.Load("res://scenes/MapsGallery.tscn");
         public readonly static PackedScene GalleryMapButton = (PackedScene)ResourceLoader.Load("res://scenes/GalleryMapButton.tscn");
         public readonly static PackedScene MainMenu = (PackedScene)ResourceLoader.Load("res://scenes/MainMenu.tscn");
@@ -39,6 +39,5 @@ namespace Globals
     {
         public readonly static string SaveMapPlot = "user://maps";
         public readonly static string SaveConfigs = "user://configs";
-        // public static string MappaPlotResScript = "res://scripts/Resources/MapPlotRes.cs";
     }
 }

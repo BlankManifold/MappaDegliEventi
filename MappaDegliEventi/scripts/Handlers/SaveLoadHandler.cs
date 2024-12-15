@@ -27,7 +27,7 @@ namespace Handlers
 			{
 				mapPlotRes.PointInfoList.Add(point.Info);
 			}
-			System.IO.Directory.CreateDirectory(Globals.Paths.SaveMapPlot);
+			// System.IO.Directory.CreateDirectory(Globals.Paths.SaveMapPlot);
 			string file_path = System.IO.Path.Combine(Globals.Paths.SaveMapPlot, $"map_{mapPlotRes.Identifier}.tres");
 			ResourceSaver.Save(mapPlotRes, file_path);
 

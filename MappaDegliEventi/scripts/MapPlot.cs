@@ -1,7 +1,7 @@
 using Godot;
 using System.Collections.Generic;
 using System.Linq;
-public partial class MappaPlot : Control
+public partial class MapPlot : Control
 {
     [Export]
     private int _max_value = 10;

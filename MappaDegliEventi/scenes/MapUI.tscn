@@ -1,13 +1,13 @@
 [gd_scene load_steps=7 format=3 uid="uid://cu2vt3givdqdv"]
 
-[ext_resource type="Script" path="res://scripts/MappaUI.cs" id="1_q5rt5"]
-[ext_resource type="PackedScene" uid="uid://bu5txu8fkd0as" path="res://scenes/MappaPlot.tscn" id="1_uv07d"]
-[ext_resource type="Script" path="res://scripts/Handlers/MapAndInfosHandler.cs" id="2_7b1pj"]
-[ext_resource type="PackedScene" uid="uid://bmhfheudgc3mt" path="res://scenes/InformationBox.tscn" id="3_7l7k4"]
-[ext_resource type="PackedScene" uid="uid://d0c12jhrcj3li" path="res://scenes/ChangeColorContainer.tscn" id="3_ipy22"]
-[ext_resource type="PackedScene" uid="uid://26brukp2jnbv" path="res://scenes/PointsList.tscn" id="3_tbdh3"]
+[ext_resource type="Script" path="res://scripts/MapUI.cs" id="1_mbvtq"]
+[ext_resource type="Script" path="res://scripts/Handlers/MapAndInfosHandler.cs" id="2_kjwhu"]
+[ext_resource type="PackedScene" uid="uid://d0c12jhrcj3li" path="res://scenes/ChangeColorContainer.tscn" id="3_7ltnl"]
+[ext_resource type="PackedScene" uid="uid://bu5txu8fkd0as" path="res://scenes/MapPlot.tscn" id="4_w38xj"]
+[ext_resource type="PackedScene" uid="uid://26brukp2jnbv" path="res://scenes/PointsList.tscn" id="5_rcyen"]
+[ext_resource type="PackedScene" uid="uid://bmhfheudgc3mt" path="res://scenes/InformationBox.tscn" id="6_f14cp"]
 
-[node name="MappaUI" type="Control"]
+[node name="MapUI" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -15,11 +15,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-script = ExtResource("1_q5rt5")
+script = ExtResource("1_mbvtq")
 
 [node name="MapAndInfosHandler" type="Node" parent="."]
 unique_name_in_owner = true
-script = ExtResource("2_7b1pj")
+script = ExtResource("2_kjwhu")
 
 [node name="DebugLabel" type="Label" parent="MapAndInfosHandler"]
 anchors_preset = 2
@@ -38,7 +38,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 20
 
-[node name="MappaName" type="LineEdit" parent="MainVerticalBox"]
+[node name="MapName" type="LineEdit" parent="MainVerticalBox"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
@@ -64,7 +64,7 @@ text = "Reset"
 layout_mode = 2
 text = "Esci"
 
-[node name="ChangeColorContainer" parent="MainVerticalBox/HBoxContainer" instance=ExtResource("3_ipy22")]
+[node name="ChangeColorContainer" parent="MainVerticalBox/HBoxContainer" instance=ExtResource("3_7ltnl")]
 unique_name_in_owner = true
 layout_mode = 2
 
@@ -90,7 +90,7 @@ grow_horizontal = 0
 text = "ATTIVAZIONE POSITIVA"
 horizontal_alignment = 1
 
-[node name="MappaPlot" parent="MainVerticalBox" instance=ExtResource("1_uv07d")]
+[node name="MapPlot" parent="MainVerticalBox" instance=ExtResource("4_w38xj")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
@@ -123,13 +123,13 @@ custom_minimum_size = Vector2(0, 275)
 layout_mode = 2
 mouse_filter = 2
 
-[node name="PointList" parent="MainVerticalBox/PointInfoBox" instance=ExtResource("3_tbdh3")]
+[node name="PointList" parent="MainVerticalBox/PointInfoBox" instance=ExtResource("5_rcyen")]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_vertical = 0
 
-[node name="InformationBox" parent="MainVerticalBox/PointInfoBox" instance=ExtResource("3_7l7k4")]
+[node name="InformationBox" parent="MainVerticalBox/PointInfoBox" instance=ExtResource("6_f14cp")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 0
@@ -137,4 +137,4 @@ size_flags_vertical = 0
 [connection signal="button_down" from="MainVerticalBox/HBoxContainer/SaveButton" to="." method="_on_save_button_button_down"]
 [connection signal="button_down" from="MainVerticalBox/HBoxContainer/ClearPlotButton" to="." method="_on_clear_plot_button_button_down"]
 [connection signal="button_down" from="MainVerticalBox/HBoxContainer/GoBackButton" to="." method="_on_go_back_button_button_down"]
-[connection signal="PointListButtonSelected" from="MainVerticalBox/PointInfoBox/PointList" to="MainVerticalBox/MappaPlot" method="_on_point_list_point_list_button_selected"]
+[connection signal="PointListButtonSelected" from="MainVerticalBox/PointInfoBox/PointList" to="MainVerticalBox/MapPlot" method="_on_point_list_point_list_button_selected"]

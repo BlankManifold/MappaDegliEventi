@@ -42,16 +42,16 @@ public partial class Main : Node
     private void _GoToMap(string identifier = null)
     {
         _RemoveCurrentScene();
-        MappaUI mappaUIScene = Globals.PackedScenes.MappaUI.Instantiate<MappaUI>();
-        mappaUIScene.GoBackButtonDown += OnMappaUIGoBackButtonDown;
+        MapUI mapUIScene = Globals.PackedScenes.MapUI.Instantiate<MapUI>();
+        mapUIScene.GoBackButtonDown += OnMapUIGoBackButtonDown;
 
         if (identifier != null)
         {
             MapPlotRes mapPlotRes = Handlers.SaveLoadHandler.LoadMapPlot(identifier);
-            mappaUIScene.Init(mapPlotRes);
+            mapUIScene.Init(mapPlotRes);
         }
 
-        _AddNewScene(mappaUIScene);
+        _AddNewScene(mapUIScene);
     }
     private void _GoToMapsGallery()
     {
@@ -87,7 +87,7 @@ public partial class Main : Node
     {
         _GoToMainMenu();
     }
-    public void OnMappaUIGoBackButtonDown()
+    public void OnMapUIGoBackButtonDown()
     {
         _GoToMainMenu();
     }

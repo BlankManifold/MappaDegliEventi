@@ -22,7 +22,7 @@ namespace Handlers
 
         private PointsList _pointsList;
         private InformationBox _informationBox;
-        private MappaPlot _mapPlot;
+        private MapPlot _mapPlot;
         private ChangeColorContainer _changeColorContainer;
         private bool _draggable = false;
         private double _clickTime = 0d;
@@ -38,7 +38,7 @@ namespace Handlers
         public override void _Ready()
         {
             _informationBox = GetNode<InformationBox>("%InformationBox");
-            _mapPlot = GetNode<MappaPlot>("%MappaPlot");
+            _mapPlot = GetNode<MapPlot>("%MapPlot");
             _pointsList = GetNode<PointsList>("%PointList");
             _changeColorContainer = GetNode<ChangeColorContainer>("%ChangeColorContainer");
 
@@ -84,6 +84,9 @@ namespace Handlers
         }
 
         #region Private methods
+        //TODO fixed focusing, enter, moving with arrow 
+
+
         private bool _IsMouseHovering()
         {
             Vector2 mousePosition = GetViewport().GetMousePosition();

@@ -1,11 +1,11 @@
 using Godot;
 
-public partial class MappaUI : Control
+public partial class MapUI : Control
 {
 	private string _mapPlotIdentifier = null;
 	private InformationBox _informationBox;
-	private LineEdit _mappaNameLineEdit;
-	private MappaPlot _mapPlot;
+	private LineEdit _mapNameLineEdit;
+	private MapPlot _mapPlot;
 	private PointsList _pointList;
 
 	private Handlers.MapAndInfosHandler _MapAndInfosHandler;
@@ -25,15 +25,15 @@ public partial class MappaUI : Control
 		_MapAndInfosHandler = GetNode<Handlers.MapAndInfosHandler>("%MapAndInfosHandler");
 
 		_informationBox = GetNode<InformationBox>("%InformationBox");
-		_mappaNameLineEdit = GetNode<LineEdit>("%MappaName");
-		_mapPlot = GetNode<MappaPlot>("%MappaPlot");
+		_mapNameLineEdit = GetNode<LineEdit>("%MapName");
+		_mapPlot = GetNode<MapPlot>("%MapPlot");
 		_pointList = GetNode<PointsList>("%PointList");
 
 		EmitSignal(SignalName.ReadyToLoadFromResource);
 	}
 	private void _LoadMapFromResource(MapPlotRes mapPlotRes)
 	{
-		_mappaNameLineEdit.Text = mapPlotRes.MapName;
+		_mapNameLineEdit.Text = mapPlotRes.MapName;
 		_mapPlotIdentifier = mapPlotRes.Identifier;
 
 		foreach (PointInfoRes info in mapPlotRes.PointInfoList)
@@ -46,7 +46,7 @@ public partial class MappaUI : Control
 	}
 	public void _on_save_button_button_down()
 	{
-		Handlers.SaveLoadHandler.SaveMapPlot(_mapPlot.Points(), _mappaNameLineEdit.Text, _mapPlotIdentifier);
+		Handlers.SaveLoadHandler.SaveMapPlot(_mapPlot.Points(), _mapNameLineEdit.Text, _mapPlotIdentifier);
 	}
 	public void _on_go_back_button_button_down()
 	{
