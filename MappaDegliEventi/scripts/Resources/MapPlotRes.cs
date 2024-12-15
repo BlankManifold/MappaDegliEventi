@@ -5,13 +5,13 @@ public partial class MapPlotRes : Resource
 {
     [Export] public string Identifier;
     [Export] public string MapName;
-    [Export] public Godot.Collections.Array<PointInfo> PointInfoList;
+    [Export] public Godot.Collections.Array<PointInfoRes> PointInfoList;
 
-    public MapPlotRes() 
+    public MapPlotRes()
     {
-        PointInfoList = new Godot.Collections.Array<PointInfo> {};     
-        Identifier = $"{Convert.ToString(0,16)}";   
-        MapName = "";   
+        PointInfoList = [];
+        Identifier = $"{Convert.ToString(0, 16)}";
+        MapName = "";
     }
 
 }

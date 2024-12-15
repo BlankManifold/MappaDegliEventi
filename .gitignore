@@ -2,6 +2,5 @@
 .godot/
 
 #VSCode
-.vscode
-.DS_Store
-MappaDegliEventi/.DS_Store
+.vscode/
+**/.DS_Store

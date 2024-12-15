@@ -14,7 +14,7 @@ public partial class InformationBox : Button
     private Button _addButton;
     private Button _removeButton;
     private Button _modifyButton;
-    private PointInfo _info;
+    private PointInfoRes _info;
 
     private ButtonsState _state = ButtonsState.Add;
     public ButtonsState State
@@ -46,9 +46,9 @@ public partial class InformationBox : Button
 
 
     [Signal]
-    public delegate void AddedPointEventHandler(PointInfo pointInfo);
+    public delegate void AddedPointEventHandler(PointInfoRes pointInfo);
     [Signal]
-    public delegate void ModifiedPointEventHandler(PointInfo info);
+    public delegate void ModifiedPointEventHandler(PointInfoRes info);
     [Signal]
     public delegate void RemovedPointEventHandler();
 
@@ -65,13 +65,13 @@ public partial class InformationBox : Button
         _modifyButton = GetNode<Button>("%ModifyPoint");
         _removeButton = GetNode<Button>("%RemovePoint");
 
-        _info = new PointInfo();
+        _info = new PointInfoRes();
         _informationContainer.Visible = false;
     }
 
-    public void Update(PointInfo info)
+    public void Update(PointInfoRes info)
     {
-        _info = new PointInfo(info);
+        _info = new PointInfoRes(info);
 
         _idLabel.Text = _info.Id.ToString();
         _nameLabel.Text = _info.Name;
@@ -142,7 +142,7 @@ public partial class InformationBox : Button
 
         this.State = ButtonsState.Modify;
         CallDeferred(MethodName.FocusNameLineEdit);
-        EmitSignal(SignalName.AddedPoint, new PointInfo(_info));
+        EmitSignal(SignalName.AddedPoint, new PointInfoRes(_info));
     }
     public void _on_modify_point_button_down()
     {
@@ -152,7 +152,7 @@ public partial class InformationBox : Button
         _info.Y = (int)_intensitySpinBox.Value;
         _info.Description = _descriptionLabel.Text;
 
-        EmitSignal(SignalName.ModifiedPoint, new PointInfo(_info));
+        EmitSignal(SignalName.ModifiedPoint, new PointInfoRes(_info));
         this.State = ButtonsState.Modify;
     }
     public void _on_remove_point_button_down()

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Handlers
 {
-	public static class SaveLoadHandler
+	public partial class SaveLoadHandler : Node
 	{
 		static public void SaveMapPlot(Godot.Collections.Array<Node> points, string name, string identifier = null)
 		{
@@ -40,7 +40,7 @@ namespace Handlers
 				return null;
 			}
 
-			MapPlotRes mapPlotRes = (MapPlotRes)ResourceLoader.Load(file_path, cacheMode: ResourceLoader.CacheMode.Ignore);
+			MapPlotRes mapPlotRes = ResourceLoader.Load<MapPlotRes>(file_path, cacheMode: ResourceLoader.CacheMode.Ignore);
 			return mapPlotRes;
 		}
 		static public void RemoveMapPlot(string identifier)
@@ -104,7 +104,7 @@ namespace Handlers
 			foreach (string path in DirAccess.Open(Globals.Paths.SaveMappaPlot).GetFiles())
 			{
 				string file_path = System.IO.Path.Combine(Globals.Paths.SaveMappaPlot, path);
-				MapPlotRes mapPlotRes = (MapPlotRes)ResourceLoader.Load(file_path, cacheMode: ResourceLoader.CacheMode.Ignore);
+				MapPlotRes mapPlotRes = ResourceLoader.Load<MapPlotRes>(file_path, cacheMode: ResourceLoader.CacheMode.Ignore);
 				Globals.MapGalleryData.Add(mapPlotRes);
 			}
 		}

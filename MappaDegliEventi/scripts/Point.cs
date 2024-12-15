@@ -3,8 +3,8 @@ using System;
 
 public partial class Point : Control
 {
-    private PointInfo _info;
-    public PointInfo Info
+    private PointInfoRes _info;
+    public PointInfoRes Info
     {
         get { return _info; }
     }
@@ -35,14 +35,14 @@ public partial class Point : Control
     [Signal]
     public delegate void HoveringEventHandler(Point point, bool on);
 
-    public void Init(PointInfo info)
+    public void Init(PointInfoRes info)
     {
         _info = info;
         GetNode<Label>("%Name").Text = info.Name;
         GetNode<Label>("%IdLabel").Text = info.Id.ToString();
         Modulate = new Color(_info.Color, 0.75f + Convert.ToInt32(_selected) * 0.25f);
     }
-    public void Update(PointInfo info, Vector2 position)
+    public void Update(PointInfoRes info, Vector2 position)
     {
         Position = position;
         _info = info;
@@ -53,7 +53,7 @@ public partial class Point : Control
     public override void _Ready()
     {
         if (_info == null)
-            _info = new PointInfo();
+            _info = new PointInfoRes();
         _popupInfo = GetNode<VBoxContainer>("%PopUpInfo");
         _popupInfo.Visible = false;
         AddToGroup("points");

@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://dynlmusvwpatb"]
+[gd_scene load_steps=3 format=3 uid="uid://dynlmusvwpatb"]
 
 [ext_resource type="Script" path="res://scripts/Main.cs" id="1_46ap7"]
+[ext_resource type="Script" path="res://scripts/Handlers/SaveLoadHandler.cs" id="2_0mbf4"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_46ap7")
@@ -16,3 +17,9 @@ theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
+
+[node name="Handlers" type="Node" parent="."]
+
+[node name="SaveLoadHandler" type="Node" parent="Handlers"]
+unique_name_in_owner = true
+script = ExtResource("2_0mbf4")

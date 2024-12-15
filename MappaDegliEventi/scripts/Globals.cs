@@ -39,6 +39,6 @@ namespace Globals
     {
         public readonly static string SaveMappaPlot = "user://maps";
         public readonly static string SaveConfigs = "user://configs";
-        // public static string MappaPlotResScript = "res://scripts/MapPlotRes.cs";
+        // public static string MappaPlotResScript = "res://scripts/Resources/MapPlotRes.cs";
     }
 }

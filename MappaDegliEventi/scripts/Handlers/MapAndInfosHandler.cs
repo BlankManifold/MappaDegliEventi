@@ -255,7 +255,7 @@ namespace Handlers
         {
             _UpdateHovering(point, hovering);
         }
-        public void OnAddedPoint(PointInfo info)
+        public void OnAddedPoint(PointInfoRes info)
         {
             Point point = _mapPlot.AddedPoint(info);
             point.Hovering += OnHovering;
@@ -273,12 +273,12 @@ namespace Handlers
 
             _GoIdle();
         }
-        public void OnModifiedPoint(PointInfo info)
+        public void OnModifiedPoint(PointInfoRes info)
         {
             _mapPlot.ModifyPoint(_selectedPoint, info);
             _pointsList.ModifyPoint(info);
         }
-        public void OnModifiedPointFromPlot(PointInfo info)
+        public void OnModifiedPointFromPlot(PointInfoRes info)
         {
             _pointsList.ModifyPoint(info);
             _informationBox.Update(info);

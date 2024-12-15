@@ -36,8 +36,7 @@ public partial class MappaUI : Control
 		_mappaNameLineEdit.Text = mapPlotRes.MapName;
 		_mapPlotIdentifier = mapPlotRes.Identifier;
 
-		Godot.Collections.Array<PointInfo> pointInfoList = (Godot.Collections.Array<PointInfo>)mapPlotRes.PointInfoList;
-		foreach (PointInfo info in pointInfoList)
+		foreach (PointInfoRes info in mapPlotRes.PointInfoList)
 		{
 			Point point = _mapPlot.AddedPoint(info);
 			point.Hovering += _MapAndInfosHandler.OnHovering;

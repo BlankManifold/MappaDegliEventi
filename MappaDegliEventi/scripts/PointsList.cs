@@ -13,7 +13,7 @@ public partial class PointsList : Button
 		_listContainer = GetNode<VBoxContainer>("%ListContainer");
 	}
 
-	public void AddAPoint(PointInfo info)
+	public void AddAPoint(PointInfoRes info)
 	{
 		int id = _listContainer.GetChildCount() + 1;
 		PackedScene pointListButtonSene = Globals.PackedScenes.PointListButton;
@@ -33,7 +33,7 @@ public partial class PointsList : Button
 		}
 		EmitSignal(SignalName.Toggled, false);
 	}
-	public void ModifyPoint(PointInfo info)
+	public void ModifyPoint(PointInfoRes info)
 	{
 		_listContainer.GetChild<PointListButton>(info.Id - 1).PointName = info.Name;
 	}

@@ -1,6 +1,6 @@
 using Godot;
 
-public partial class PointInfo : Resource
+public partial class PointInfoRes : Resource
 {
 	[Export] public int Id;
 	[Export] public string Name;
@@ -8,7 +8,7 @@ public partial class PointInfo : Resource
 	[Export] public int Y;
 	[Export] public string Description;
 	[Export] public Color Color;
-	public PointInfo()
+	public PointInfoRes()
 	{
 		Id = 0;
 		Name = "";
@@ -17,11 +17,11 @@ public partial class PointInfo : Resource
 		Description = "";
 		Color = new Color(1, 1, 1);
 	}
-	public PointInfo(int id, string name, int x, int y, string description, Color? color = null)
+	public PointInfoRes(int id, string name, int x, int y, string description, Color? color = null)
 	{
 		Id = id;
 		Name = name;
-		this.X = x;
+		X = x;
 		Y = y;
 		Description = description;
 		if (color != null)
@@ -29,7 +29,7 @@ public partial class PointInfo : Resource
 		else
 			Color = new Color(1, 1, 1);
 	}
-	public PointInfo(PointInfo info)
+	public PointInfoRes(PointInfoRes info)
 	{
 		Id = info.Id;
 		Name = info.Name;
